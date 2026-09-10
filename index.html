@@ -65,12 +65,23 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .chd{font-size:10px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .chd i{font-size:14px}
 .tl{display:flex;flex-direction:column;gap:6px}
-.slot{display:grid;grid-template-columns:46px 3px 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:var(--rs);border:1px solid var(--bd);transition:border-color .15s;position:relative}
+
+/* .slot{display:grid;grid-template-columns:46px 3px 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:var(--rs);border:1px solid var(--bd);transition:border-color .15s;position:relative} */
+.slot{display:grid;grid-template-columns:130px 3px 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:var(--rs);border:1px solid var(--bd);transition:border-color .15s;position:relative}
+
 .slot:hover .stip{display:block}
 .stip{display:none;position:absolute;bottom:calc(100% + 6px);left:56px;background:#2a2f40;border:1px solid var(--bd2);border-radius:var(--rs);padding:8px 10px;font-size:11px;color:var(--t2);line-height:1.5;width:260px;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:none}
 .stip strong{color:#fff;display:block;margin-bottom:3px;font-size:11px}
 .slot:hover{border-color:var(--bd2);background:var(--bg3)}
-.stime{font-size:11px;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace}
+
+/*.stime{font-size:11px;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace}*/
+.stime{font-size:11px;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace;display:flex;align-items:center;gap:6px;white-space:nowrap}
+
+.speri{display:inline-flex;gap:3px;font-size:13px}
+.speri .ti-sunrise{color:#fcd34d}
+.speri .ti-sun{color:#fb923c}
+.speri .ti-moon{color:#c4b5fd}
+
 .sbar{width:3px;border-radius:2px;align-self:stretch;min-height:28px}
 .scurso{font-size:12px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
 .stags{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap}
@@ -887,8 +898,6 @@ const DATA = [
   ["2026-09-12", "6º Andar - Amazonia", "US MORA", "08:00 - 12:00", "Notebook", 1, 0, "", "", "", "Prédio 1", "https://us06web.zoom.us/j/88496958004?pwd=b3cVsfnYcS177UqSPb1Pjb2a39csNk.1"],
   ["2026-09-12", "6º Andar - Amazonia", "US MORA", "08:00 - 12:00", "Monitor", 1, 0, "", "", "", "Prédio 1", "https://us06web.zoom.us/j/88496958004?pwd=b3cVsfnYcS177UqSPb1Pjb2a39csNk.1"],
 
-
-
   ["2026-09-15", "10º Andar", "FE CGM1", "13:30 - 18:00", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
   ["2026-09-15", "10º Andar", "FE CGM1", "13:30 - 18:00", "TV Extra", 2, 0, "", "", "", "Prédio 3", ""],
 
@@ -924,6 +933,38 @@ function recInfo(rec) {
   if (r.includes('impressora'))   return {i:'ti-printer',        c:'toth',l:'Impressora'};
   if (r.includes('4dview'))       return {i:'ti-3d-cube-sphere', c:'toth',l:'4DView'};
   return {i:'ti-package',c:'toth',l:rec};
+}
+// Ícones de período baseado no horário
+function periodIcons(timeStr){
+  if(!timeStr) return '';
+  const matches = timeStr.match(/(\d{1,2}):(\d{2})/g) || [];
+  if(!matches.length) return '';
+  const times = matches.map(function(t){
+    const p = t.split(':').map(Number);
+    return p[0]*60 + p[1];
+  });
+  // Regras: manhã < 12:30 (750min) | tarde 12:30-18:59 (750-1140) | noite >= 19:00 (1140)
+  const periods = new Set();
+  const isRange = timeStr.includes('-') && times.length >= 2;
+  if(isRange){
+    const start = Math.min.apply(null, times);
+    const end   = Math.max.apply(null, times);
+    if(start < 750)                     periods.add('m');   // manhã
+    if(start < 1140 && end > 750)       periods.add('t');   // tarde
+    if(end >= 1140)                     periods.add('n');   // noite
+  } else {
+    times.forEach(function(min){
+      if(min < 750)       periods.add('m');
+      else if(min < 1140) periods.add('t');
+      else                periods.add('n');
+    });
+  }
+  const ic = {
+    m: '<i class="ti ti-sunrise" title="Manhã"></i>',
+    t: '<i class="ti ti-sun"     title="Tarde"></i>',
+    n: '<i class="ti ti-moon"    title="Noite"></i>'
+  };
+  return ['m','t','n'].filter(function(p){return periods.has(p);}).map(function(p){return ic[p];}).join('');
 }
 
 // Ordem oficial das salas: chave "Prédio|Sala" (Prédio 1 -> Prédio 2 -> Prédio 3 -> EAD)
@@ -1083,7 +1124,8 @@ function renderDay(){
       }
       const descEntries=Object.entries(s.descs||{});
       const stipHtml=descEntries.length?'<div class="stip">'+descEntries.map(function(de){return'<strong>'+esc(de[0])+'</strong>'+esc(de[1]);}).join('<br><br>')+'</div>':'';
-      return '<div class="slot">'+stipHtml+'<span class="stime">'+(s.i||'\u2014')+'</span><div class="sbar" style="background:'+col+'"></div><div><div class="scurso">'+esc(s.c||'\u2014')+'</div><div class="stags">'+tags+'</div></div><span class="ssala">'+esc(roomLabel(s.u,s.a))+'</span></div>';
+      //return '<div class="slot">'+stipHtml+'<span class="stime">'+(s.i||'\u2014')+'</span><div class="sbar" style="background:'+col+'"></div><div><div class="scurso">'+esc(s.c||'\u2014')+'</div><div class="stags">'+tags+'</div></div><span class="ssala">'+esc(roomLabel(s.u,s.a))+'</span></div>';
+      return '<div class="slot">'+stipHtml+'<span class="stime"><span class="speri">'+periodIcons(s.i)+'</span>'+(s.i||'\u2014')+'</span><div class="sbar" style="background:'+col+'"></div><div><div class="scurso">'+esc(s.c||'\u2014')+'</div><div class="stags">'+tags+'</div></div><span class="ssala">'+esc(roomLabel(s.u,s.a))+'</span></div>';
     }).join('');
   }
 
