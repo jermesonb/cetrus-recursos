@@ -159,7 +159,48 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .empty{text-align:center;padding:32px 16px;color:var(--t3);font-size:13px}
 .empty i{font-size:28px;display:block;margin-bottom:8px}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
-@media(max-width:900px){.content{grid-template-columns:1fr;grid-template-rows:auto 1fr}.sidebar{max-height:240px;flex-direction:row;overflow-x:auto;overflow-y:hidden}.sbs{flex-shrink:0;border-bottom:none;border-right:1px solid var(--bd);min-width:180px}.metrics{grid-template-columns:repeat(2,1fr)}.dnav-right{align-items:flex-start}}
+
+/*@media(max-width:900px){.content{grid-template-columns:1fr;grid-template-rows:auto 1fr}.sidebar{max-height:240px;flex-direction:row;overflow-x:auto;overflow-y:hidden}.sbs{flex-shrink:0;border-bottom:none;border-right:1px solid var(--bd);min-width:180px}.metrics{grid-template-columns:repeat(2,1fr)}.dnav-right{align-items:flex-start}}*/
+/* ===== Responsivo ===== */
+.main{min-width:0}
+.arow strong,.zrow strong{min-width:0;overflow-wrap:anywhere}
+
+/* Tablet e celular */
+@media(max-width:900px){
+  .content{display:block;height:auto;overflow:visible}
+  .sidebar{flex-direction:column;max-height:none;overflow:visible;border-right:none;border-bottom:1px solid var(--bd)}
+  .sbs{border-right:none;min-width:0}
+  .mpills{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}
+  .mpill{width:auto;flex-shrink:0;white-space:nowrap;gap:8px}
+  .cgrid{max-width:340px}
+  .main{overflow:visible;padding:14px}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .dnav-right{align-items:flex-start;width:100%}
+  .filter-bar{justify-content:flex-start}
+}
+
+/* Celular */
+@media(max-width:600px){
+  .header{padding:12px 14px}
+  .dtitle{font-size:17px}
+  .metric{padding:12px}
+  .mval{font-size:26px}
+  .card,.zpanel{padding:12px}
+
+  /* Linha do tempo empilhada: horário / curso + tags / sala */
+  .slot{grid-template-columns:3px 1fr;gap:4px 10px}
+  .slot .sbar{grid-column:1;grid-row:1 / span 3}
+  .slot .stime{grid-column:2;grid-row:1}
+  .slot .sbar + div{grid-column:2;grid-row:2;min-width:0}
+  .slot .ssala{grid-column:2;grid-row:3;text-align:left;max-width:none;min-width:0;padding-left:0}
+  .scurso{white-space:normal;max-width:none}
+
+  .stip,.tip{left:0;right:0;width:auto}
+  .sgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .zgrid,.agrid{grid-template-columns:1fr}
+  .tbtn{padding:6px 10px}
+}
+
 </style>
 </head>
 <body>
