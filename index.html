@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <link rel="icon" type="image/svg+xml" href="https://cdn-icons-png.flaticon.com/512/2409/2409635.png">
 <style>
-:root{--bg:#0f1117;--bg2:#181c26;--bg3:#1f2433;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.14);--t1:#fff;--t2:#d0d4e0;--t3:#9098b0;--green:#2dd4a0;--gdim:rgba(45,212,160,.13);--blue:#5b9cf6;--bdim:rgba(91,156,246,.13);--orange:#fb923c;--odim:rgba(251,146,60,.13);--purple:#c4b5fd;--pdim:rgba(196,181,253,.13);--amber:#fcd34d;--adim:rgba(252,211,77,.12);--pink:#f472b6;--pkdim:rgba(244,114,182,.13);--teal:#2dd4bf;--tdim:rgba(45,212,191,.13);--r:10px;--rs:6px}
+:root{--bg:#0f1117;--bg2:#181c26;--bg3:#1f2433;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.14);--t1:#fff;--t2:#d0d4e0;--t3:#9098b0;--green:#2dd4a0;--gdim:rgba(45,212,160,.13);--blue:#5b9cf6;--bdim:rgba(91,156,246,.13);--orange:#fb923c;--odim:rgba(251,146,60,.13);--purple:#c4b5fd;--pdim:rgba(196,181,253,.13);--amber:#fcd34d;--adim:rgba(252,211,77,.12);--pink:#f472b6;--pkdim:rgba(244,114,182,.13);--teal:#2dd4bf;--tdim:rgba(45,212,191,.13);--red:#f87171;--rdim:rgba(248,113,113,.14);--sky:#38bdf8;--skdim:rgba(56,189,248,.14);--indigo:#a5b4fc;--idim:rgba(165,180,252,.14);--lime:#a3e635;--ldim:rgba(163,230,53,.14);--r:10px;--rs:6px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-height:100vh}
 .app{display:grid;grid-template-rows:auto 1fr;min-height:100vh}
@@ -94,6 +94,13 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .tmic{background:var(--pdim);color:var(--purple)}
 .tmon{background:var(--tdim);color:var(--teal)}
 .toth{background:rgba(255,255,255,.07);color:var(--t2)}
+
+.tsom{background:var(--idim);color:var(--indigo)}
+.tpod{background:var(--ldim);color:var(--lime)}
+.ttx{background:var(--rdim);color:var(--red)}
+.trx{background:var(--skdim);color:var(--sky)}
+.twarn{background:var(--adim);color:var(--amber)}
+
 .tloc{background:var(--adim);color:var(--amber);font-size:9px;padding:1px 4px;border-radius:4px}
 .ssala{font-size:10px;color:#fff;text-align:right;min-width:80px;max-width:160px;font-family:'DM Mono',monospace;padding-left:6px;line-height:1.35}
 /* Salas */
@@ -118,9 +125,9 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .tbtn:hover{color:var(--t1)}
 .tbtn.active{background:var(--bg2);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .zgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
-.zcard{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 13px;display:flex;flex-direction:column;gap:5px}
-.zcard.active{border-color:rgba(91,156,246,.4);background:rgba(91,156,246,.07)}
-.zcard.inactive{opacity:.45}
+.zcard{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 13px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.zcard.active{border-color:rgba(91,156,246,.4);background:rgba(91,156,246,.07);min-width:0}
+.zcard.inactive{opacity:.45;min-width:0}
 .zname{font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:5px}
 .zname i{color:var(--blue);font-size:13px}
 .zbadge{font-size:9px;background:var(--bdim);color:var(--blue);padding:2px 6px;border-radius:8px;font-weight:600;margin-left:auto}
@@ -128,8 +135,13 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .zrow i{font-size:11px;flex-shrink:0;color:var(--t3)}
 .zrow strong{color:#fff;font-weight:500}
 .zmono{font-family:'DM Mono',monospace;letter-spacing:.04em}
-.zaulas{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}
-.zatag{font-size:9px;background:rgba(91,156,246,.15);color:var(--blue);padding:2px 6px;border-radius:6px;white-space:nowrap}
+.zaulas{margin-top:5px;display:flex;flex-direction:column;gap:4px;min-width:0}
+/*.zaulas{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}*/
+.zatag .zacurso{color:var(--t2);font-family:'DM Mono',monospace;font-size:9.5px}
+.zatag{display:flex;flex-direction:column;gap:1px;font-size:10px;line-height:1.35;background:rgba(91,156,246,.12);color:var(--blue);padding:5px 8px;border-radius:6px;white-space:normal;overflow-wrap:anywhere;min-width:0}
+.zatag .zasala{font-weight:600;color:#fff;display:flex;align-items:center;gap:4px}
+.zatag .zasala i{font-size:11px;color:var(--blue);flex-shrink:0}
+/*.zatag{font-size:9px;background:rgba(91,156,246,.15);color:var(--blue);padding:2px 6px;border-radius:6px;white-space:nowrap}*/
 .zlink{font-size:10px;color:var(--blue);display:flex;align-items:center;gap:4px;margin-top:3px;text-decoration:none;overflow:hidden}
 .zlink:hover{color:#fff;text-decoration:underline}
 .zlink i{font-size:11px;flex-shrink:0}
@@ -1262,15 +1274,14 @@ const DATA = [
   ["2026-09-23", "6º Andar - Auditorio José Olimpio", "Reunião Geral", "17:00 - 18:00", "Notebook", 1, 0, "EducaCetrus2", "874 9170 4752", "RG - SP + BH", "Prédio 1", " https://us06web.zoom.us/j/87491704752?pwd=ffNlanzENuO2HUqfvfIR3ZV5KFVl38.1"],
   ["2026-09-23", "6º Andar - Auditorio José Olimpio", "Reunião Geral", "17:00 - 18:00", "Microfone", 1, 0, "EducaCetrus2", "874 9170 4752", "RG - SP + BH", "Prédio 1", " https://us06web.zoom.us/j/87491704752?pwd=ffNlanzENuO2HUqfvfIR3ZV5KFVl38.1"],
 
-  ["2026-09-24", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
-  ["2026-09-24", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Focusrite", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
-  ["2026-09-24", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Microfone", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
-  ["2026-09-24", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Transmite para CERRADO", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
-  ["2026-09-24", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "ATENÇÃO: ESTRUTURA DE AUDIO ESTÁ CHIANDO COM FOCUS", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
+  ["2026-09-25", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
+  ["2026-09-25", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Focusrite", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
+  ["2026-09-25", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Microfone podcast", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
+  ["2026-09-25", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Transmite para CERRADO", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
+  ["2026-09-25", "AUDITORIO PAMPA", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "ATENÇÃO: ESTRUTURA DE AUDIO ESTÁ CHIANDO COM FOCUS", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
 
-  ["2026-09-24", "AUDITORIO CERRADO", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
-  ["2026-09-24", "AUDITORIO CERRADO", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Recebe Transmi. da Pampa", 1, 0, "CetrusOnline1", "883 5360 8204 ", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
-
+  ["2026-09-25", "AUDITORIO CERRADO", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline1", "883 5360 8204", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
+  ["2026-09-25", "AUDITORIO CERRADO", "Gestão Hospitalar - Desmontagem colação de grau", "08:00 - 22:00", "Recebe Transmi. da Pampa", 1, 0, "CetrusOnline1", "883 5360 8204", "Transmissão para monitores PAMPA > CERRADO", "Prédio 2", "https://us06web.zoom.us/j/88353608204?pwd=tRtY1VquT3fDjHk2bLNZhULtCpr23z.1"],
 
   ["2026-10-28", "EAD", "PG_NEU2.SP1.2604.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline2", " 884 3874 7210 ", "Solicitado no glpi nexo transmissão, id do chamado: 13 720", "EAD", "https://us06web.zoom.us/j/88438747210?pwd=vqPWwr9GLfbkvi8mWa5bk1CpWXHTKL.1"],
 
@@ -1290,8 +1301,14 @@ const CONTAS_ZOOM = {
 // Resource config: icon + css class + label
 function recInfo(rec) {
   const r = rec.toLowerCase();
+  if (r.includes('aten\u00e7\u00e3o')||r.includes('atencao')) return {i:'ti-alert-triangle', c:'twarn', l:rec};
+  if (r.includes('recebe'))      return {i:'ti-antenna-bars-5', c:'trx', l:rec};
+  if (r.includes('transmite')||r.includes('emite')) return {i:'ti-cast', c:'ttx', l:rec};
+  if (r.includes('caixa de som')||r.includes('caixa som')) return {i:'ti-device-speaker', c:'tsom', l:'Caixa de Som'};
+  if (r.includes('microfone') && (r.includes('bast')||r.includes('de m\u00e3o')||r.includes('de mao'))) return {i:'ti-microphone-2', c:'tmic', l:'Microfone de M\u00e3o'};
+  if (r.includes('podcast'))     return {i:'ti-brand-apple-podcast', c:'tpod', l:'Microfone Podcast'};
+  if ((r.includes('c\u00e2mera')||r.includes('camera')) && r.includes('trip')) return {i:'ti-video', c:'tcam', l:'C\u00e2mera Trip\u00e9'};
   if (r.includes('notebook'))    return {i:'ti-device-laptop', c:'tnb', l:'Notebook'};
-  if (r.includes('impressora'))      return {i:'ti-device-laptop',       c:'toth',l:'Impressora'};
   if (r.includes('tv extra'))    return {i:'ti-device-tv',     c:'ttv', l:'TV Extra'};
   if (r.includes('transmiss'))   return {i:'ti-broadcast',     c:'ttr', l:'Transmiss\u00e3o'};
   if (r.includes('c\u00e2mera')) return {i:'ti-camera',        c:'tcam',l:'C\u00e2mera'};
@@ -1537,9 +1554,14 @@ function renderDay(){
       const info=recInfo(r);
       const locBadge=v.locado?'<span class="sloc">Locado</span>':'';
       const qty=v.qtd>1?': <strong>'+v.qtd+'</strong>':'';
+      
       rec+='<div class="srec"><i class="ti '+info.i+'" style="color:var(--'+
-        (info.c==='tnb'?'green':info.c==='ttv'?'blue':info.c==='ttr'?'orange':info.c==='tcam'?'pink':info.c==='tmon'?'teal':'purple')+')"></i>'+
+        ({tnb:'green',ttv:'blue',ttr:'orange',tcam:'pink',tmon:'teal',tsom:'indigo',ttx:'red',trx:'sky',twarn:'amber',tpod:'lime'}[info.c]||'purple')+')"></i>'+
         info.l+qty+locBadge+'</div>';
+      
+      //rec+='<div class="srec"><i class="ti '+info.i+'" style="color:var(--'+
+      //  (info.c==='tnb'?'green':info.c==='ttv'?'blue':info.c==='ttr'?'orange':info.c==='tcam'?'pink':info.c==='tmon'?'teal':'purple')+')"></i>'+
+      //  info.l+qty+locBadge+'</div>';
     }
     if(sd.tr){
       if(sd.cz)rec+='<div class="srec"><i class="ti ti-brand-zoom" style="color:var(--blue)"></i>Conta: <strong>'+esc(sd.cz)+'</strong></div>';
@@ -1569,7 +1591,7 @@ function renderZoom(){
 
   function makeCard(name,info,used,data){
     const aulasHtml=used&&data.aulas.length
-      ?'<div class="zaulas">'+data.aulas.map(function(a){return'<span class="zatag">'+esc(a.a)+' \u00b7 '+esc(a.c)+'</span>';}).join('')+'</div>':'';
+      ?'<div class="zaulas">'+data.aulas.map(function(a){return'<div class="zatag" title="'+esc(a.a)+' \u2014 '+esc(a.c)+'"><span class="zasala"><i class="ti ti-door"></i>'+esc(a.a)+'</span><span class="zacurso">'+esc(a.c)+'</span></div>';}).join('')+'</div>':'';
     const linkHtml=used&&data.link
       ?'<a class="zlink" href="'+esc(data.link)+'" target="_blank" rel="noopener"><i class="ti ti-external-link"></i><span>Entrar na aula</span></a>':'';
     return '<div class="zcard'+(used?' active':' inactive')+'">'+
@@ -1606,7 +1628,7 @@ function renderAllAccounts(){
     const name=e[0],info=e[1];
     return '<div class="acard">'+
       '<div class="aname"><i class="ti ti-brand-zoom"></i>'+esc(name)+'</div>'+
-      '<div class="arow"><i class="ti ti-at"></i><strong>'+esc(info.u)+'</strong><button class="cpbtn" onclick="copyText(\''+info.u.replace(/'/g,"\\'")+(info.u)+'\',this)">copiar</button></div>'+
+      '<div class="arow"><i class="ti ti-at"></i><strong>'+esc(info.u)+'</strong><button class="cpbtn" onclick="copyText(\''+info.u.replace(/'/g,"\\'")+'\',this)">copiar</button></div>'+
       '<div class="arow zmono"><i class="ti ti-lock"></i><strong>'+esc(info.p)+'</strong><button class="cpbtn" onclick="copyText(\''+info.p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\',this)">copiar</button></div>'+
       '</div>';
   }).join('');
