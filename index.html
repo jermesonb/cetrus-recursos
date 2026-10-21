@@ -128,6 +128,12 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .zcard{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 13px;display:flex;flex-direction:column;gap:5px;min-width:0}
 .zcard.active{border-color:rgba(91,156,246,.4);background:rgba(91,156,246,.07);min-width:0}
 .zcard.inactive{opacity:.45;min-width:0}
+.zcard.meet.active{border-color:rgba(45,212,160,.4);background:rgba(45,212,160,.06)}
+.zcard.meet .zname i,.zcard.meet .zatag .zasala i{color:var(--green)}
+.zcard.meet .zbadge{background:var(--gdim);color:var(--green)}
+.zcard.meet .zatag{background:rgba(45,212,160,.1);color:var(--green)}
+.zcard.meet .zalink{color:var(--green)}
+.acard.meet .aname i{color:var(--green)}
 .zname{font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:5px}
 .zname i{color:var(--blue);font-size:13px}
 .zbadge{font-size:9px;background:var(--bdim);color:var(--blue);padding:2px 6px;border-radius:8px;font-weight:600;margin-left:auto}
@@ -146,6 +152,11 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .zlink:hover{color:#fff;text-decoration:underline}
 .zlink i{font-size:11px;flex-shrink:0}
 .zlink span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zalink{font-size:10px;color:var(--blue);display:inline-flex;align-items:center;gap:4px;margin-top:4px;text-decoration:none;width:fit-content}
+.zalink:hover{color:#fff;text-decoration:underline}
+.zalink i{font-size:11px}
+.zalink.off{color:var(--t3);cursor:default}
+.zalink.off:hover{color:var(--t3);text-decoration:none}
 .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .acard{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;display:flex;flex-direction:column;gap:5px}
 .aname{font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px}
@@ -254,6 +265,20 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
         <div id="zgrid" class="zgrid"></div>
         <div id="zall" style="display:none"></div>
       </div>
+
+      <div class="zpanel">
+        <div class="zpanel-hd">
+          <div class="chd" style="margin-bottom:0"><i class="ti ti-brand-google"></i>Contas Google Meet</div>
+          <div class="tab-bar">
+            <button class="tbtn active" id="mtab-day" onclick="switchTabMeet('day')"><i class="ti ti-calendar-event" style="font-size:11px;margin-right:4px"></i>Em uso hoje</button>
+            <button class="tbtn" id="mtab-all" onclick="switchTabMeet('all')"><i class="ti ti-list" style="font-size:11px;margin-right:4px"></i>Todas as contas</button>
+          </div>
+        </div>
+        <div id="mgrid" class="zgrid"></div>
+        <div id="mall" style="display:none"></div>
+      </div>
+
+
     </main>
   </div>
 </div>
@@ -708,6 +733,7 @@ const DATA = [
   ["2026-10-25", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
   ["2026-10-25", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 18:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
 
+  ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Transmissão", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
   ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Recebe transmissão externa (Blanc Hospital) ", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
   ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Tv Extra", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
   ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Notebook", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
@@ -813,8 +839,6 @@ const DATA = [
   ["2026-10-23", "4º Andar", "PG_DOR2.SP1.2602.1", "08:30 - 13:00", "Notebook", 1, 0, "CetrusOnline1", "  899 1012 8988  ", "", "Prédio 3", "https://us06web.zoom.us/j/89910128988?pwd=aHZbOxIl87pjPmr0fgP6IMltdCSpTx.1"],
 
 
-
-
 ];
 
 
@@ -826,6 +850,11 @@ const CONTAS_ZOOM = {
   "CetrusOnline3": {"u":"cetrus.online3@sanar.com",     "p":"nxCXY4BiciG8"},
   "CetrusOnline4": {"u":"cetrus.online4@sanar.com",     "p":'gG*x?KX1"K~'},
   "CetrusOnline5": {"u":"cetrus.online5@sanar.com",     "p":".+ms~nk$'JvG1"},
+};
+
+const CONTAS_MEET = {
+  "GoogleMeet":  {"u":"estudiossanar@sanar.com", "p":"???"},
+  "AudioVisual": {"u":"estudiossanar@sanar.com", "p":"???"},
 };
 
 // Resource config: icon + css class + label
@@ -1105,30 +1134,43 @@ function renderDay(){
 
 // ── Zoom ───────────────────────────────────────────────────────────────────
 function renderZoom(){
-  const usedMap={};  // conta -> {aulas:[], link:''}
+  const usedMap={};  // conta -> {aulas:[{a,c,i,link}]}
   for(const r of filteredRows()){
     if(!r[4].toLowerCase().includes('transmiss'))continue;
     const conta=r[7];
     if(!conta||!CONTAS_ZOOM[conta])continue;
-    if(!usedMap[conta])usedMap[conta]={aulas:[],link:''};
-    const entry={a:r[1],c:r[2]};
-    if(!usedMap[conta].aulas.find(function(x){return x.a===entry.a&&x.c===entry.c;}))
-      usedMap[conta].aulas.push(entry);
-    if(r[11]&&!usedMap[conta].link)usedMap[conta].link=r[11];
+    if(!usedMap[conta])usedMap[conta]={aulas:[]};
+
+    const link=(r[11]||'').trim();
+    const ex=usedMap[conta].aulas.find(function(x){return x.a===r[1]&&x.c===r[2];});
+    if(ex){
+      if(!ex.link&&link)ex.link=link;   // completa o link se a 1ª linha não tinha
+    } else {
+      usedMap[conta].aulas.push({a:r[1],c:r[2],i:r[3],link:link});
+    }
   }
   const usedNames=Object.keys(usedMap).sort();
   const unusedNames=Object.keys(CONTAS_ZOOM).filter(function(n){return!usedMap[n];});
 
   function makeCard(name,info,used,data){
     const aulasHtml=used&&data.aulas.length
-      ?'<div class="zaulas">'+data.aulas.map(function(a){return'<div class="zatag" title="'+esc(a.a)+' \u2014 '+esc(a.c)+'"><span class="zasala"><i class="ti ti-door"></i>'+esc(a.a)+'</span><span class="zacurso">'+esc(a.c)+'</span></div>';}).join('')+'</div>':'';
-    const linkHtml=used&&data.link
-      ?'<a class="zlink" href="'+esc(data.link)+'" target="_blank" rel="noopener"><i class="ti ti-external-link"></i><span>Entrar na aula</span></a>':'';
+      ?'<div class="zaulas">'+data.aulas.map(function(a){
+          const lk=a.link
+            ?'<a class="zalink" href="'+esc(a.link)+'" target="_blank" rel="noopener"><i class="ti ti-external-link"></i>Entrar na aula</a>'
+            :'<span class="zalink off"><i class="ti ti-link-off"></i>Sem link</span>';
+          return '<div class="zatag" title="'+esc(a.a)+' \u2014 '+esc(a.c)+'">'+
+            '<span class="zasala"><i class="ti ti-door"></i>'+esc(a.a)+'</span>'+
+            '<span class="zacurso">'+esc(a.c)+'</span>'+
+            (a.i?'<span class="zacurso">'+esc(a.i)+'</span>':'')+
+            lk+
+          '</div>';
+        }).join('')+'</div>'
+      :'';
     return '<div class="zcard'+(used?' active':' inactive')+'">'+
       '<div class="zname"><i class="ti ti-brand-zoom"></i>'+esc(name)+(used?'<span class="zbadge">em uso</span>':'')+'</div>'+
       '<div class="zrow"><i class="ti ti-at"></i><strong>'+esc(info.u)+'</strong></div>'+
       '<div class="zrow zmono"><i class="ti ti-lock"></i><strong>'+esc(info.p)+'</strong></div>'+
-      aulasHtml+linkHtml+
+      aulasHtml+
       '</div>';
   }
 
@@ -1136,7 +1178,89 @@ function renderZoom(){
     (usedNames.length
       ?usedNames.map(function(n){return makeCard(n,CONTAS_ZOOM[n],true,usedMap[n]);}).join('')
       :'<div class="empty" style="padding:16px;text-align:left"><i class="ti ti-video-off" style="font-size:20px;margin-bottom:4px;display:block"></i>Nenhuma transmiss\u00e3o hoje</div>')
-    +unusedNames.map(function(n){return makeCard(n,CONTAS_ZOOM[n],false,{aulas:[],link:''});}).join('');
+    +unusedNames.map(function(n){return makeCard(n,CONTAS_ZOOM[n],false,{aulas:[]});}).join('');
+
+      renderMeet();
+}
+
+// ── Google Meet ────────────────────────────────────────────────────────────
+function normKey(s){return String(s||'').replace(/\s+/g,'').toLowerCase();}
+function resolveConta(contas,nome){
+  const n=normKey(nome);
+  return Object.keys(contas).find(function(k){return normKey(k)===n;})||null;
+}
+function isMeetRow(r){
+  return (r[11]||'').includes('meet.google.com')||normKey(r[7]).includes('meet');
+}
+
+function renderMeet(){
+  const usedMap={};
+  for(const r of filteredRows()){
+    if(!r[4].toLowerCase().includes('transmiss'))continue;
+    if(!isMeetRow(r))continue;
+    const conta=resolveConta(CONTAS_MEET,r[7])||(r[7]||'Google Meet').trim();
+    if(!usedMap[conta])usedMap[conta]={aulas:[]};
+    const link=(r[11]||'').trim(), code=(r[8]||'').trim();
+    const ex=usedMap[conta].aulas.find(function(x){return x.a===r[1]&&x.c===r[2];});
+    if(ex){
+      if(!ex.link&&link)ex.link=link;
+      if(!ex.code&&code)ex.code=code;
+    } else {
+      usedMap[conta].aulas.push({a:r[1],c:r[2],i:r[3],link:link,code:code});
+    }
+  }
+  const usedNames=Object.keys(usedMap).sort();
+  const unusedNames=Object.keys(CONTAS_MEET).filter(function(n){return!usedMap[n];});
+
+  function makeCard(name,info,used,data){
+    info=info||{u:'',p:''};
+    const aulasHtml=used&&data.aulas.length
+      ?'<div class="zaulas">'+data.aulas.map(function(a){
+          const lk=a.link
+            ?'<a class="zalink" href="'+esc(a.link)+'" target="_blank" rel="noopener"><i class="ti ti-external-link"></i>Entrar na aula</a>'
+            :'<span class="zalink off"><i class="ti ti-link-off"></i>Sem link</span>';
+          return '<div class="zatag" title="'+esc(a.a)+' \u2014 '+esc(a.c)+'">'+
+            '<span class="zasala"><i class="ti ti-door"></i>'+esc(a.a)+'</span>'+
+            '<span class="zacurso">'+esc(a.c)+'</span>'+
+            (a.i?'<span class="zacurso">'+esc(a.i)+'</span>':'')+
+            (a.code?'<span class="zacurso">ID: '+esc(a.code)+'</span>':'')+
+            lk+
+          '</div>';
+        }).join('')+'</div>'
+      :'';
+    return '<div class="zcard meet'+(used?' active':' inactive')+'">'+
+      '<div class="zname"><i class="ti ti-brand-google"></i>'+esc(name)+(used?'<span class="zbadge">em uso</span>':'')+'</div>'+
+      (info.u?'<div class="zrow"><i class="ti ti-at"></i><strong>'+esc(info.u)+'</strong></div>':'')+
+      (info.p?'<div class="zrow zmono"><i class="ti ti-lock"></i><strong>'+esc(info.p)+'</strong></div>':'')+
+      aulasHtml+
+      '</div>';
+  }
+
+  document.getElementById('mgrid').innerHTML=
+    (usedNames.length
+      ?usedNames.map(function(n){return makeCard(n,CONTAS_MEET[n],true,usedMap[n]);}).join('')
+      :'<div class="empty" style="padding:16px;text-align:left"><i class="ti ti-video-off" style="font-size:20px;margin-bottom:4px;display:block"></i>Nenhuma transmiss\u00e3o via Meet hoje</div>')
+    +unusedNames.map(function(n){return makeCard(n,CONTAS_MEET[n],false,{aulas:[]});}).join('');
+}
+
+function switchTabMeet(tab){
+  document.getElementById('mtab-day').classList.toggle('active',tab==='day');
+  document.getElementById('mtab-all').classList.toggle('active',tab==='all');
+  document.getElementById('mgrid').style.display=tab==='day'?'':'none';
+  document.getElementById('mall').style.display=tab==='all'?'':'none';
+}
+
+function renderAllMeetAccounts(){
+  const el=document.getElementById('mall');
+  el.className='agrid';
+  el.innerHTML=Object.entries(CONTAS_MEET).map(function(e){
+    const name=e[0],info=e[1];
+    return '<div class="acard meet">'+
+      '<div class="aname"><i class="ti ti-brand-google"></i>'+esc(name)+'</div>'+
+      (info.u?'<div class="arow"><i class="ti ti-at"></i><strong>'+esc(info.u)+'</strong><button class="cpbtn" onclick="copyText(\''+info.u.replace(/'/g,"\\'")+'\',this)">copiar</button></div>':'')+
+      (info.p?'<div class="arow zmono"><i class="ti ti-lock"></i><strong>'+esc(info.p)+'</strong><button class="cpbtn" onclick="copyText(\''+info.p.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\',this)">copiar</button></div>':'')+
+      '</div>';
+  }).join('');
 }
 
 function switchTab(tab){
@@ -1166,6 +1290,7 @@ function renderAllAccounts(){
 
 renderAll();
 renderAllAccounts();
+renderAllMeetAccounts();
 </script>
 </body>
 </html>
