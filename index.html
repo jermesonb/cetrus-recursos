@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <link rel="icon" type="image/svg+xml" href="https://cdn-icons-png.flaticon.com/512/2409/2409635.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 :root{--bg:#0f1117;--bg2:#181c26;--bg3:#1f2433;--bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.14);--t1:#fff;--t2:#d0d4e0;--t3:#9098b0;--green:#2dd4a0;--gdim:rgba(45,212,160,.13);--blue:#5b9cf6;--bdim:rgba(91,156,246,.13);--orange:#fb923c;--odim:rgba(251,146,60,.13);--purple:#c4b5fd;--pdim:rgba(196,181,253,.13);--amber:#fcd34d;--adim:rgba(252,211,77,.12);--pink:#f472b6;--pkdim:rgba(244,114,182,.13);--teal:#2dd4bf;--tdim:rgba(45,212,191,.13);--red:#f87171;--rdim:rgba(248,113,113,.14);--sky:#38bdf8;--skdim:rgba(56,189,248,.14);--indigo:#a5b4fc;--idim:rgba(165,180,252,.14);--lime:#a3e635;--ldim:rgba(163,230,53,.14);--r:10px;--rs:6px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -20,8 +21,14 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .header h1{font-size:15px;font-weight:600;letter-spacing:-.01em}
 .header p{font-size:12px;color:var(--t2);margin-top:1px}
 .badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);background:var(--gdim);padding:4px 10px;border-radius:20px}
+.badge.err{color:var(--red);background:var(--rdim)}
+.badge.err .dot{background:var(--red)}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
 #lupd{font-size:11px;color:var(--t3)}
+.rbtn{background:var(--bg3);border:1px solid var(--bd2);color:var(--t2);border-radius:var(--rs);padding:4px 8px;cursor:pointer;font-size:13px;display:flex;align-items:center}
+.rbtn:hover{color:var(--t1)}
+.rbtn.spin i{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .content{display:grid;grid-template-columns:280px 1fr;height:calc(100vh - 65px);overflow:hidden}
 .sidebar{background:var(--bg2);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow-y:auto}
 .sbs{padding:16px;border-bottom:1px solid var(--bd)}
@@ -65,23 +72,16 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .chd{font-size:10px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .chd i{font-size:14px}
 .tl{display:flex;flex-direction:column;gap:6px}
-
-/* .slot{display:grid;grid-template-columns:46px 3px 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:var(--rs);border:1px solid var(--bd);transition:border-color .15s;position:relative} */
 .slot{display:grid;grid-template-columns:130px 3px 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:var(--rs);border:1px solid var(--bd);transition:border-color .15s;position:relative}
-
 .slot:hover .stip{display:block}
 .stip{display:none;position:absolute;bottom:calc(100% + 6px);left:56px;background:#2a2f40;border:1px solid var(--bd2);border-radius:var(--rs);padding:8px 10px;font-size:11px;color:var(--t2);line-height:1.5;width:260px;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:none}
 .stip strong{color:#fff;display:block;margin-bottom:3px;font-size:11px}
 .slot:hover{border-color:var(--bd2);background:var(--bg3)}
-
-/*.stime{font-size:11px;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace}*/
 .stime{font-size:11px;font-weight:500;color:var(--t3);font-family:'DM Mono',monospace;display:flex;align-items:center;gap:6px;white-space:nowrap}
-
 .speri{display:inline-flex;gap:3px;font-size:13px}
 .speri .ti-sunrise{color:#fcd34d}
 .speri .ti-sun{color:#fb923c}
 .speri .ti-moon{color:#c4b5fd}
-
 .sbar{width:3px;border-radius:2px;align-self:stretch;min-height:28px}
 .scurso{font-size:12px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
 .stags{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap}
@@ -94,13 +94,11 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .tmic{background:var(--pdim);color:var(--purple)}
 .tmon{background:var(--tdim);color:var(--teal)}
 .toth{background:rgba(255,255,255,.07);color:var(--t2)}
-
 .tsom{background:var(--idim);color:var(--indigo)}
 .tpod{background:var(--ldim);color:var(--lime)}
 .ttx{background:var(--rdim);color:var(--red)}
 .trx{background:var(--skdim);color:var(--sky)}
 .twarn{background:var(--adim);color:var(--amber)}
-
 .tloc{background:var(--adim);color:var(--amber);font-size:9px;padding:1px 4px;border-radius:4px}
 .ssala{font-size:10px;color:#fff;text-align:right;min-width:80px;max-width:160px;font-family:'DM Mono',monospace;padding-left:6px;line-height:1.35}
 /* Salas */
@@ -117,7 +115,7 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .sc:hover .tip{display:block}
 .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:#2a2f40;border:1px solid var(--bd2);border-radius:var(--rs);padding:8px 10px;font-size:11px;color:var(--t2);line-height:1.5;width:230px;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:none}
 .tip strong{color:#fff;display:block;margin-bottom:3px;font-size:11px}
-/* Zoom */
+/* Zoom / Meet */
 .zpanel{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
 .zpanel-hd{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .tab-bar{display:flex;gap:2px;background:var(--bg3);border-radius:var(--rs);padding:3px;width:fit-content}
@@ -142,16 +140,10 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .zrow strong{color:#fff;font-weight:500}
 .zmono{font-family:'DM Mono',monospace;letter-spacing:.04em}
 .zaulas{margin-top:5px;display:flex;flex-direction:column;gap:4px;min-width:0}
-/*.zaulas{margin-top:5px;display:flex;flex-wrap:wrap;gap:3px}*/
 .zatag .zacurso{color:var(--t2);font-family:'DM Mono',monospace;font-size:9.5px}
 .zatag{display:flex;flex-direction:column;gap:1px;font-size:10px;line-height:1.35;background:rgba(91,156,246,.12);color:var(--blue);padding:5px 8px;border-radius:6px;white-space:normal;overflow-wrap:anywhere;min-width:0}
 .zatag .zasala{font-weight:600;color:#fff;display:flex;align-items:center;gap:4px}
 .zatag .zasala i{font-size:11px;color:var(--blue);flex-shrink:0}
-/*.zatag{font-size:9px;background:rgba(91,156,246,.15);color:var(--blue);padding:2px 6px;border-radius:6px;white-space:nowrap}*/
-.zlink{font-size:10px;color:var(--blue);display:flex;align-items:center;gap:4px;margin-top:3px;text-decoration:none;overflow:hidden}
-.zlink:hover{color:#fff;text-decoration:underline}
-.zlink i{font-size:11px;flex-shrink:0}
-.zlink span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .zalink{font-size:10px;color:var(--blue);display:inline-flex;align-items:center;gap:4px;margin-top:4px;text-decoration:none;width:fit-content}
 .zalink:hover{color:#fff;text-decoration:underline}
 .zalink i{font-size:11px}
@@ -169,14 +161,13 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
 .cpbtn.copied{color:var(--green);border-color:var(--green)}
 .empty{text-align:center;padding:32px 16px;color:var(--t3);font-size:13px}
 .empty i{font-size:28px;display:block;margin-bottom:8px}
+.empty.err{color:var(--red)}
+.empty small{display:block;margin-top:6px;color:var(--t3);font-size:11px}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
 
-/*@media(max-width:900px){.content{grid-template-columns:1fr;grid-template-rows:auto 1fr}.sidebar{max-height:240px;flex-direction:row;overflow-x:auto;overflow-y:hidden}.sbs{flex-shrink:0;border-bottom:none;border-right:1px solid var(--bd);min-width:180px}.metrics{grid-template-columns:repeat(2,1fr)}.dnav-right{align-items:flex-start}}*/
 /* ===== Responsivo ===== */
 .main{min-width:0}
 .arow strong,.zrow strong{min-width:0;overflow-wrap:anywhere}
-
-/* Tablet e celular */
 @media(max-width:900px){
   .content{display:block;height:auto;overflow:visible}
   .sidebar{flex-direction:column;max-height:none;overflow:visible;border-right:none;border-bottom:1px solid var(--bd)}
@@ -189,42 +180,36 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
   .dnav-right{align-items:flex-start;width:100%}
   .filter-bar{justify-content:flex-start}
 }
-
-/* Celular */
 @media(max-width:600px){
   .header{padding:12px 14px}
   .dtitle{font-size:17px}
   .metric{padding:12px}
   .mval{font-size:26px}
   .card,.zpanel{padding:12px}
-
-  /* Linha do tempo empilhada: horário / curso + tags / sala */
   .slot{grid-template-columns:3px 1fr;gap:4px 10px}
   .slot .sbar{grid-column:1;grid-row:1 / span 3}
   .slot .stime{grid-column:2;grid-row:1}
   .slot .sbar + div{grid-column:2;grid-row:2;min-width:0}
   .slot .ssala{grid-column:2;grid-row:3;text-align:left;max-width:none;min-width:0;padding-left:0}
   .scurso{white-space:normal;max-width:none}
-
   .stip,.tip{left:0;right:0;width:auto}
   .sgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
   .zgrid,.agrid{grid-template-columns:1fr}
   .tbtn{padding:6px 10px}
 }
-
 </style>
 </head>
 <body>
 <div class="app">
   <header class="header">
-   
     <div class="hleft">
       <div class="hicon"><i class="ti ti-calendar-event"></i></div>
       <div><h1>Dashboard de Agendamentos</h1><p>Agendamento de Recursos Extras — Aulas</p></div>
     </div>
     <div class="hright">
-      <span id="lupd"></span>
-      <div class="badge"><span class="dot"></span>Ao vivo</div>
+      <span id="lupd">Carregando…</span>
+      <button class="rbtn" id="rbtn" onclick="loadData(false)" title="Recarregar da planilha"><i class="ti ti-refresh"></i></button>
+      <div class="badge" id="livebadge"><span class="dot"></span><span id="livetxt">Ao vivo</span></div>
     </div>
   </header>
   <div class="content">
@@ -252,7 +237,7 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
         </div>
       </div>
       <div class="metrics" id="metrics"></div>
-      <div class="card"><div class="chd"><i class="ti ti-clock"></i>Linha do tempo — horários de início</div><div class="tl" id="tl"></div></div>
+      <div class="card"><div class="chd"><i class="ti ti-clock"></i>Linha do tempo — horários de início</div><div class="tl" id="tl"><div class="empty"><i class="ti ti-loader-2"></i>Carregando agendamentos da planilha…</div></div></div>
       <div class="card"><div class="chd"><i class="ti ti-door"></i>Salas e recursos do dia</div><div class="sgrid" id="sgrid"></div></div>
       <div class="zpanel">
         <div class="zpanel-hd">
@@ -277,685 +262,24 @@ body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;min-h
         <div id="mgrid" class="zgrid"></div>
         <div id="mall" style="display:none"></div>
       </div>
-
-
     </main>
   </div>
 </div>
 <script>
-const DATA = [
-
-  //["2026-10-28", "EAD", "PG_NEU2.SP1.2604.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline2", " 884 3874 7210 ", "Solicitado no glpi nexo transmissão, id do chamado: 13 720", "EAD", "https://us06web.zoom.us/j/88438747210?pwd=vqPWwr9GLfbkvi8mWa5bk1CpWXHTKL.1"],
-
-  ["2026-10-01", "EAD", "PG_END1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "AudioVisual", "bjy-pvpz-ksd", "Solicitado: Transmissão Aula EAD", "EAD", "https://meet.google.com/bjy-pvpz-ksd "],
-
-  //PG_AND1.SP1.2603.1 - Data: 02/10/2026, 03/10/2026
-  
-  ["2026-10-02", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-  ["2026-10-02", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Focusrite", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-  //["2026-10-02", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Monitor", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-  //["2026-10-02", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Notebook", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-
-  ["2026-10-03", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-  ["2026-10-03", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Focusrite", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-  //["2026-10-03", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Monitor", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-  //["2026-10-03", "8º Andar - Auditório Eucalipto", "PG_AND1.SP1.2603.1", "08:00 - 12:00", "Notebook", 1, 0, "CetrusOnline1", "885 0637 5341", "Observação: Transmissão para os alunos que estarão trabalhando nas eleições", "Prédio 3", "https://us06web.zoom.us/j/88506375341?pwd=DAoz84wnertrro4bJfxd9QFEUNiQLY.1"],
-
-  //PG_AND1.SP1.2603.1 - Data: 02/10/2026, 03/10/2026
-  ["2026-10-02", "Auditorio Agreste", "PG_ECO1.SP1.2604.1", "08:00 - 12:00", "Notebook", 30, 0, "", "", "Notebook Alunos (01 notebook por aluno) Sistema Echopac em todos os computadores (alunos e professores)", "Prédio 2", ""],
-  ["2026-10-02", "Auditorio Agreste", "PG_ECO1.SP1.2604.1", "08:00 - 12:00", "Echopac", 1, 0, "", "", "Notebook Alunos (01 notebook por aluno) Sistema Echopac em todos os computadores (alunos e professores)", "Prédio 2", ""],
-
-  ["2026-10-03", "Auditorio Agreste", "PG_ECO1.SP1.2604.1", "08:00 - 12:00", "Notebook", 30, 0, "", "", "Notebook Alunos (01 notebook por aluno) Sistema Echopac em todos os computadores (alunos e professores)", "Prédio 2", ""],
-  ["2026-10-03", "Auditorio Agreste", "PG_ECO1.SP1.2604.1", "08:00 - 12:00", "Echopac", 1, 0, "", "", "Notebook Alunos (01 notebook por aluno) Sistema Echopac em todos os computadores (alunos e professores)", "Prédio 2", ""],
-
-  ["2026-10-04", "Auditorio Agreste", "PG_ECO1.SP1.2604.1", "08:00 - 12:00", "Notebook", 30, 0, "", "", "Notebook Alunos (01 notebook por aluno) Sistema Echopac em todos os computadores (alunos e professores)", "Prédio 2", ""],
-  ["2026-10-04", "Auditorio Agreste", "PG_ECO1.SP1.2604.1", "08:00 - 12:00", "Echopac", 1, 0, "", "", "Notebook Alunos (01 notebook por aluno) Sistema Echopac em todos os computadores (alunos e professores)", "Prédio 2", ""],
-
-  //PG_MSK2.SP1.2605.1 - Data: 02/10/2026 – 04/10/20265
-  ["2026-10-02", "EAD", "PG_MSK2.SP1.2605.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline5", "853 3416 8274", "Treinar professor convidado", "EAD", "https://us06web.zoom.us/j/85334168274?pwd=04yRE4i3hDbZDe96y6R178qCuPxkvh.1"],
-  ["2026-10-03", "EAD", "PG_MSK2.SP1.2605.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline5", "853 3416 8274", "Treinar professor convidado", "EAD", "https://us06web.zoom.us/j/85334168274?pwd=04yRE4i3hDbZDe96y6R178qCuPxkvh.1"],
-  ["2026-10-04", "EAD", "PG_MSK2.SP1.2605.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline5", "853 3416 8274", "Treinar professor convidado", "EAD", "https://us06web.zoom.us/j/85334168274?pwd=04yRE4i3hDbZDe96y6R178qCuPxkvh.1"],
-
-  //PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1 - Data: 02/10/2026 – 03/10/2026
-  ["2026-10-02", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "14:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-02", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "14:00 - 18:00", "Focusrite", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-02", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "14:00 - 18:00", "Notebook", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-02", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "14:00 - 18:00", "Monitor", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-02", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "14:00 - 18:00", "Microfone", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-
-  ["2026-10-03", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "08:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-03", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "08:00 - 18:00", "Focusrite", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-03", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "08:00 - 18:00", "Notebook", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-03", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "08:00 - 18:00", "Monitor", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-  ["2026-10-03", "Auditorio Jatobá", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "08:00 - 18:00", "Microfone", 1, 0, "EducaCetrus1", "897 8199 6535", "Curso híbrido com NPE2", "Prédio 3", "https://us06web.zoom.us/j/89781996535?pwd=PFaL3ixfRIGJjsycMhSMX7ayRccPrU.1"],
-
-  ["2026-10-04", "3º Andar - Lado B", "PG_NPO1.SP1.2602.1/PG_NPE2.SP1.2602.1", "08:00 - 12:00", "Notebook", 4, 0, "", "", "Curso híbrido com NPE2", "Prédio 3", ""],
-
-  //PG_EVA1.SP1.2606.1 - Data: 02/10/2026 – 03/10/2026
-  ["2026-10-02", "Amazonia", "PG_EVA1.SP1.2606.1", "08:00 - 12:00", "Microfone xuxa", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-03", "Amazonia", "PG_EVA1.SP1.2606.1", "08:00 - 12:00", "Microfone xuxa", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-
-
-  ["2026-10-02", "2º andar", "PG_EVA1.SP1.2606.1", "13:00 - 18:00", "TV Extra", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-02", "2º andar", "PG_EVA1.SP1.2606.1", "13:00 - 18:00", "Camera Tripe", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-02", "2º andar", "PG_EVA1.SP1.2606.1", "13:00 - 18:00", "Microfone Xuxa", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-
-  ["2026-10-03", "2º andar", "PG_EVA1.SP1.2606.1", "13:00 - 18:00", "TV Extra", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-03", "2º andar", "PG_EVA1.SP1.2606.1", "13:00 - 18:00", "Camera Tripe", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-03", "2º andar", "PG_EVA1.SP1.2606.1", "13:00 - 18:00", "Microfone Xuxa", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-
-  ["2026-10-04", "2º andar", "PG_EVA1.SP1.2606.1", "08:00 - 12:00", "TV Extra", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-04", "2º andar", "PG_EVA1.SP1.2606.1", "08:00 - 12:00", "Camera Tripe", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-  ["2026-10-04", "2º andar", "PG_EVA1.SP1.2606.1", "08:00 - 12:00", "Microfone Xuxa", 1, 0, "", "", "Tv extra conectada na câmera com tripé Caixa de som", "Prédio 1", ""],
-
-  //PG_ENC1.SP1.2605.1
-  ["2026-10-02", "8º andar - Auditorio Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 12:00", "Transmissão", 1, 0, "", "", "02/10 Cirurgia do Hospital e transmitida para o sala de aula", "Prédio 3", ""],
-  ["2026-10-02", "8º andar - Auditorio Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 12:00", "TV Extra", 1, 0, "", "", "02/10 Cirurgia do Hospital e transmitida para o sala de aula", "Prédio 3", ""],
-  ["2026-10-02", "8º andar - Auditorio Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 12:00", "Notebook", 1, 0, "", "", "02/10 Cirurgia do Hospital e transmitida para o sala de aula", "Prédio 3", ""],
-
-  ["2026-10-02", "3º andar - Lado B", "PG_ENC1.SP1.2605.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "02/10 Cirurgia do Hospital e transmitida para o sala de aula", "Prédio 3", ""],
-  ["2026-10-03", "Subsolo", "PG_ENC1.SP1.2605.1", "08:00 - 18:00", "TV Extra", 1, 0, "", "", "02/10 Cirurgia do Hospital e transmitida para o sala de aula", "Prédio 3", ""],
-
-  //PG_HIST.SP1.2609.1
-  ["2026-10-02", "5º andar", "PG_HIST.SP1.2609.1", "08:30 - 18:00", "TV Extra", 3, 0, "", "", "Perguntar para idla para saber quatidade exata de tvs", "Prédio 3", ""],
-  ["2026-10-03", "5º andar", "PG_HIST.SP1.2609.1", "08:30 - 18:00", "TV Extra", 3, 0, "", "", "Perguntar para idla para saber quatidade exata de tvs", "Prédio 3", ""],
-
-  //EC_FETL.RC1.2610.1
-  ["2026-10-03", "Sala Juazeiro", "EC_FETL.RC1.2610.1", "10:30 - 12:00", "Transmissão", 1, 0, "CetrusOnline2", "889 9653 5813", "Professora vai estar online na aula as 10:45", "Recife", "https://us06web.zoom.us/j/88996535813?pwd=biSAgCCePjbrH80p5xPTPJGtOEKmMI.1"],
-
-  //PG_MEEM.SANAR.261002
-  ["2026-10-02", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "Notebook", 3, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman | 1 kit em cada sala ", "Prédio 3", ""],
-  ["2026-10-02", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "Simman", 1, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman | 1 kit em cada sala ", "Prédio 3", ""],
-  ["2026-10-02", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "TV Extra", 3, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman | 1 kit em cada sala ", "Prédio 3", ""],
-
-
-  ["2026-10-03", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "Notebook", 3, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman | 1 kit em cada sala ", "Prédio 3", ""],
-  ["2026-10-03", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "Simman", 1, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman | 1 kit em cada sala ", "Prédio 3", ""],
-  ["2026-10-03", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "TV Extra", 3, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman ", "Prédio 3", ""],
-
-
-  ["2026-10-04", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "Notebook", 3, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman ", "Prédio 3", ""],
-  ["2026-10-04", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "Simman", 1, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman ", "Prédio 3", ""],
-  ["2026-10-04", "10º Andar - Salas 1,2,3", "PG_MEEM.SANAR.261002", "08:30 - 18:00", "TV Extra", 3, 0, "", "", "Solicitado: 3 Tv extra + 3 Simman ", "Prédio 3", ""],
-
-
-
-  //PG_COL1.SP1.2603.1
-  ["2026-10-05", "EAD", "PG_COL1.SP1.2603.1", "19:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline1", "840 0904 6678", "", "EAD", "https://us06web.zoom.us/j/84009046678?pwd=0n67qpa6eZQaTDTj5arOwWdameTRnd.1"],
-  ["2026-10-07", "EAD", "PG_DOR1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline3", " 896 6372 0260 ", "", "EAD", " https://us06web.zoom.us/j/89663720260?pwd=7cMF2pvCQz6aVy5GjMP4n2Tr9Fbdaj.1 "],
-  
-  ["2026-10-07", "5º Andar", "GO_TEC1.SP1.2610.1", "08:00 - 18:00", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-07", "5º Andar", "GO_TEC1.SP1.2610.1", "08:00 - 18:00", "Camera Tripe", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-07", "5º Andar", "GO_TEC1.SP1.2610.1", "08:00 - 18:00", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-02", "1º Andar", "PG URE1", "08:00 - 18:00", "Atenção: Testar ultrassom com Dra. Karina", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-03", "1º Andar", "PG URE1", "08:00 - 12:00", "Atenção: Testar ultrassom com Dra. Karina", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-04", "1º Andar", "PG URE1", "08:00 - 12:00", "Atenção: Testar ultrassom com Dra. Karina", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-06", "6ºAndar - Auditório Amazônia", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  ["2026-10-07", "6ºAndar - Auditório Amazônia", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  ["2026-10-09", "6ºAndar - Auditório Amazônia", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  //["2026-10-12", "6ºAndar - Auditório Amazônia", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  //["2026-10-14", "6ºAndar - Auditório Amazônia", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-
-  
-  ["2026-10-06", "6ºAndar - Auditorio Sertão", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Recebe Transmi. Auditório Amazônia", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  ["2026-10-07", "6ºAndar - Auditorio José Olimpio", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Recebe Transmi. Auditório Amazônia", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  ["2026-10-09", "7ºAndar - Sala Maker", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Recebe Transmi. Auditório Sala Maker 1", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  //["2026-10-12", "6ºAndar - Auditorio José Olimpio", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Recebe Transmi. Auditório Amazônia", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-  //["2026-10-14", "6ºAndar - Auditorio Sertão", "US_GIO1.SP1.2610.1", "08:00 - 12:00", "Recebe Transmi. Auditório Amazônia", 1, 0, "CetrusOnline5", " 812 1009 5257 ", "", "Prédio 1", "https://us06web.zoom.us/j/81210095257?pwd=nVnZliXliBulan0E3iAAt0HGqpUWZ9.1"],
-
-
-  //US_DOPE.SP1.2610.1
-  ["2026-10-07", "EAD", "US_DOPE.SP1.2610.1", "20:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline2", "873 5079 6633", "07/10 às 20h o Dr. Mateus Vasco irá dar uma aula online de Introdução, fisiologia, anatomia. Contato: 11 999671905", "Prédio 1", "https://us06web.zoom.us/j/89603776627?pwd=sFh08JRdJZ7MQXP1s1Y8zFVAeWTW4E.1"],
-  //["2026-10-09", "Auditorio Pampa", "US_DOPE.SP1.2610.1", "08:00 - 09:00", "Transmissão", 1, 0, "CetrusOnline2", "873 5079 6633", "", "Prédio 2", "https://us06web.zoom.us/j/89603776627?pwd=sFh08JRdJZ7MQXP1s1Y8zFVAeWTW4E.1"],
-
-  //PG_ANE1.SP1.2607.1
-  ["2026-10-09", "3º Andar - Lado B", "PG_ANE1.SP1.2607.1", "08:30 - 19:00", "TV Extra", 1, 0, "", "", "Notebook conectado na tv", "Prédio 3", ""],
-  ["2026-10-09", "3º Andar - Lado B", "PG_ANE1.SP1.2607.1", "08:30 - 19:00", "Notebook", 1, 0, "", "", "Notebook conectado na tv", "Prédio 3", ""],
-
-
-  //PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1
-  ["2026-10-09", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Transmissão", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-09", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Focusrite", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-09", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Microfone de Mão", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-09", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Monitor", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-09", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Notebook", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-09", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Atenção: Transmissão para Recife", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-
-  ["2026-10-11", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Transmissão", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-11", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Focusrite", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-11", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Microfone de Mão", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-11", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Monitor", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-11", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Notebook", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-  ["2026-10-11", "8º Andar - Eucalipto", "PG_COP1.SP1.2603.1/PG_CPH1.RC1.2603.1", "08:30 - 12:00", "Atenção: Transmissão para Recife", 1, 0, "EducaCetrus2", "830 0855 1354", "Aulas de Sp serão transmitidas para Recife", "Prédio 3", "https://us06web.zoom.us/j/83008551354?pwd=aPEqv6fa4KLpBcEwa3C1mN5p2j87Bi.1"],
-
-
-  //PG_NUTR.SANAR.261009
-  ["2026-10-09", "3º Andar", "PG_NUTR.SANAR.261009", "13:30 - 19:00", "Notebook", 7, 0, "", "Solicitado: um notebook por box", "", "Prédio 3", ""],
-  //["2026-10-11", "3º Andar", "PG_NUTR.SANAR.261009", "13:30 - 19:00", "", 1, 0, "", "", "", "Prédio 3", ""],
-
-
-  //PG_DOR1.SP1.2606.1
-  ["2026-10-07", "EAD", "PG_DOR1.SP1.2606.1", "20:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline3", "896 6372 0260", "", "Prédio 3", "https://us06web.zoom.us/j/89663720260?pwd=7cMF2pvCQz6aVy5GjMP4n2Tr9Fbdaj.1"],
-
-  ["2026-10-09", "4º Andar", "PG_DOR1.SP1.2606.1", "13:30 - 19:00", "Notebook", 7, 0, "", " 896 6372 0260 ", "Solicitado: 7 Notebook + Tv Extra no box Central", "Prédio 3", "https://us06web.zoom.us/j/89663720260?pwd=7cMF2pvCQz6aVy5GjMP4n2Tr9Fbdaj.1"],
-  ["2026-10-09", "4º Andar", "PG_DOR1.SP1.2606.1", "13:30 - 19:00", "TV Extra", 1, 0, "", " 896 6372 0260 ", "Solicitado: 7 Notebook + Tv Extra no box Central", "Prédio 3", "https://us06web.zoom.us/j/89663720260?pwd=7cMF2pvCQz6aVy5GjMP4n2Tr9Fbdaj.1"],
-  ["2026-10-10", "4º Andar", "PG_DOR1.SP1.2606.1", "13:30 - 19:00", "Notebook", 6, 0, "", " 896 6372 0260 ", "Solicitado: 6 Notebook + Tv Extra no box Central", "Prédio 3", "https://us06web.zoom.us/j/89663720260?pwd=7cMF2pvCQz6aVy5GjMP4n2Tr9Fbdaj.1"],
-  ["2026-10-10", "4º Andar", "PG_DOR1.SP1.2606.1", "13:30 - 19:00", "TV Extra", 1, 0, "", " 896 6372 0260 ", "Solicitado: 6 Notebook + Tv Extra no box Central", "Prédio 3", "https://us06web.zoom.us/j/89663720260?pwd=7cMF2pvCQz6aVy5GjMP4n2Tr9Fbdaj.1"],
-
-  //PG_POP1.SP1.2605.1
-  ["2026-10-09", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "13:30 - 19:00", "Transmissão", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  ["2026-10-09", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "13:30 - 19:00", "Focusrite", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  //["2026-10-09", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "13:30 - 19:00", "Notebook", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  //["2026-10-09", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "13:30 - 19:00", "Monitor", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-
-  ["2026-10-10", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "08:30 - 19:00", "Transmissão", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  ["2026-10-10", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "08:30 - 19:00", "Focusrite", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  //["2026-10-10", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "08:30 - 19:00", "Notebook", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  //["2026-10-10", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "08:30 - 19:00", "Monitor", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-
-  ["2026-10-11", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "08:30 - 12:00", "Transmissão", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  ["2026-10-11", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "08:30 - 12:00", "Focusrite", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  //["2026-10-11", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "13:30 - 19:00", "Notebook", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-  //["2026-10-11", "6º Andar - Auditorio Sertão", "PG_POP1.SP1.2605.1", "13:30 - 19:00", "Monitor", 1, 0, "CetrusOnline1", " 872 3442 8933 ", "Solicitado: Transmissão Aula Hibrida", "Prédio 1", "https://us06web.zoom.us/j/87234428933?pwd=Iukm1Cr11SnTbsVwJ9djbnVlsu8NzW.1"],
-
-  //PG_NEP2.SANAR.261007
-  //["2026-10-09", "Subsolo", "PG_NEP2.SANAR.261007", "14:00 - 16:00", "Notebook", 1, 0, "", "", "Solicitado: 1 Notebook para professor", "Prédio 3", ""],
-  ["2026-10-07", "3º Andar - Lado B", "PG_NEP2.SANAR.261007", "13:30 - 19:00", "Notebook", 6, 0, "", "", "Solicitado: 6 Notebook", "Prédio 3", ""],
-  ["2026-10-08", "3º Andar - Lado B", "PG_NEP2.SANAR.261007", "08:30 - 19:00", "Notebook", 6, 0, "", "", "Solicitado: 6 Notebook", "Prédio 3", ""],
-  ["2026-10-09", "4º Andar", "PG_NEP2.SANAR.261007", "08:30 - 12:00", "Notebook", 6, 0, "", "", "Solicitado: 6 Notebook", "Prédio 3", ""],
-  ["2026-10-10", "4º Andar", "PG_NEP2.SANAR.261007", "08:30 - 12:00", "Notebook", 6, 0, "", "", "Solicitado: 6 Notebook", "Prédio 3", ""],
-
-  //PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1
-  ["2026-10-09", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Transmissão", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-09", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Focusrite", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-09", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Monitor", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-09", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Notebook", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-09", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Microfone de Mão", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-
-  ["2026-10-10", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Transmissão", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-10", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Focusrite", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-10", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Monitor", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-10", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Notebook", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-  ["2026-10-10", "6º Andar - Auditorio José Olimpio", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "14:00 - 19:00", "Microfone de Mão", 1, 0, "CetrusOnline2", " 863 3646 1362 ", "", "Prédio 1", "https://us06web.zoom.us/j/86336461362?pwd=g98wtOLbNGpYhsGlWuqhzPzMEaYZad.1"],
-
-  ["2026-10-11", "3º Andar", "PG_PNE1.SP1.2605.1/PG_PNO1.SP1.2605.1", "08:30 - 12:00", "Notebook", 10, 0, "", "", "", "Prédio 1", ""],
-
-  //EC_AEF1.SP1.2610.1
-  ["2026-10-08", "5º Andar", "EC_AEF1.SP1.2610.1", "13:30 - 19:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-09", "3º Andar", "EC_AEF1.SP1.2610.1", "13:30 - 19:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "6º Andar - José Olimpio", "EC_AEF1.SP1.2610.1", "08:30 - 10:00", "Transmissão", 1, 0, "CetrusOnline2", "840 1627 6320", "Solicitado: Professora vai dar aula remoto para alunos presencial", "Prédio 1", "https://us06web.zoom.us/j/84016276320?pwd=SvafquIlnEKTCaUivbuavIWpdIGbvv.1"],
-  ["2026-10-10", "6º Andar - José Olimpio", "EC_AEF1.SP1.2610.1", "08:30 - 10:00", "Atenção: Professor Remoto", 1, 0, "CetrusOnline2", " 840 1627 6320 ", "Solicitado: Professora vai dar aula remoto para alunos presencial", "Prédio 1", "https://us06web.zoom.us/j/84016276320?pwd=SvafquIlnEKTCaUivbuavIWpdIGbvv.1"],
-  ["2026-10-10", "6º Andar - José Olimpio", "EC_AEF1.SP1.2610.1", "08:30 - 10:00", "Focusrite", 1, 0, "CetrusOnline2", " 840 1627 6320 ", "Solicitado: Professora vai dar aula remoto para alunos presencial", "Prédio 1", "https://us06web.zoom.us/j/84016276320?pwd=SvafquIlnEKTCaUivbuavIWpdIGbvv.1"],
-
-  //PG_HIST.SP1.2610.E
-  ["2026-10-09", "8º Andar - Comissão Própria de Avaliação", "PG_HIST.SP1.2610.E", "08:30 - 12:00", "Adaptador USB-C", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-09", "8º Andar - Comissão Própria de Avaliação", "PG_HIST.SP1.2610.E", "08:30 - 12:00", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-09", "8º Andar - Comissão Própria de Avaliação", "PG_HIST.SP1.2610.E", "08:30 - 12:00", "Passador de Slides", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-09", "5º Andar", "PG_HIST.SP1.2610.E", "13:30 - 19:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-09", "5º Andar", "PG_HIST.SP1.2610.E", "13:30 - 19:00", "Impressora", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-09", "5º Andar", "PG_HIST.SP1.2610.E", "13:30 - 19:00", "Atenção: Andar dividido", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-10", "8º Andar - Comissão Própria de Avaliação", "PG_HIST.SP1.2610.E", "08:30 - 12:00", "Adaptador USB-C", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "8º Andar - Comissão Própria de Avaliação", "PG_HIST.SP1.2610.E", "08:30 - 12:00", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "8º Andar - Comissão Própria de Avaliação", "PG_HIST.SP1.2610.E", "08:30 - 12:00", "Passador de Slides", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-10", "5º Andar", "PG_HIST.SP1.2610.E", "13:30 - 19:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "5º Andar", "PG_HIST.SP1.2610.E", "13:30 - 19:00", "Impressora", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "5º Andar", "PG_HIST.SP1.2610.E", "13:30 - 19:00", "Atenção: Andar dividido", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-11", "5º Andar", "PG_HIST.SP1.2610.E", "08:30 - 19:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-11", "5º Andar", "PG_HIST.SP1.2610.E", "08:30 - 19:00", "Impressora", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-11", "5º Andar", "PG_HIST.SP1.2610.E", "08:30 - 19:00", "Atenção: Andar dividido", 1, 0, "", "", "", "Prédio 1", ""],
-
-  //PG_GIN2.SP1.2609.1
-  ["2026-10-11", "5º Andar", "PG_GIN2.SP1.2609.1", "08:30 - 19:00", "Notebook", 13, 0, "", "", "", "Prédio 3", "https://us06web.zoom.us/j/88048839332?pwd=EswFv60IbnPxxHLx8GVwun4GgvnAQ5.1"],
-  ["2026-10-12", "8º Andar - Jatobá", "PG_GIN2.SP1.2609.1", "08:30 - 19:00", "Transmissão", 1, 0, "CetrusOnline2", " 880 4883 9332 ", "Solicitado: Sincrona", "Prédio 3", "https://us06web.zoom.us/j/88048839332?pwd=EswFv60IbnPxxHLx8GVwun4GgvnAQ5.1"],
-  ["2026-10-12", "8º Andar - Jatobá", "PG_GIN2.SP1.2609.1", "08:30 - 19:00", "Focusrite", 1, 0, "CetrusOnline2", " 880 4883 9332 ", "Solicitado: Sincrona", "Prédio 3", "https://us06web.zoom.us/j/88048839332?pwd=EswFv60IbnPxxHLx8GVwun4GgvnAQ5.1"],
-  ["2026-10-12", "8º Andar - Jatobá", "PG_GIN2.SP1.2609.1", "08:30 - 19:00", "Monitor", 1, 0, "CetrusOnline2", " 880 4883 9332 ", "Solicitado: Sincrona", "Prédio 3", "https://us06web.zoom.us/j/88048839332?pwd=EswFv60IbnPxxHLx8GVwun4GgvnAQ5.1"],
-  ["2026-10-12", "8º Andar - Jatobá", "PG_GIN2.SP1.2609.1", "08:30 - 19:00", "Notebook", 1, 0, "CetrusOnline2", " 880 4883 9332 ", "Solicitado: Sincrona", "Prédio 3", "https://us06web.zoom.us/j/88048839332?pwd=EswFv60IbnPxxHLx8GVwun4GgvnAQ5.1"],
-  ["2026-10-13", "EAD", "PG_GIN2.SP1.2609.1", "08:30 - 19:00", "Transmissão", 1, 0, "CetrusOnline2", " 880 4883 9332 ", "Solicitado: Sincrona", "EAD", "https://us06web.zoom.us/j/88048839332?pwd=EswFv60IbnPxxHLx8GVwun4GgvnAQ5.1"],
-
-  ["2026-10-09", "2º Andar", "PG_USME.SP1.2608.1", "08:30 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "1º Andar", "PG_USME.SP1.2608.1", "08:30 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-10", "1º Andar", "PG_USME.SP1.2608.1", "18:30 - 20:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-11", "1º Andar", "PG_USME.SP1.2608.1", "08:30 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-14", "EAD", "PG_REGE.SP1.2603.1/PG_REGE.SP1.2608.1/PG_REGE.SP1.2610.1", "19:30 - 22:00", "Transmissão", 1, 0, "CetrusOnline3", " 811 2571 6906 ", "", "EAD", "https://us06web.zoom.us/j/81125716906?pwd=0JiDjxWXtCPBzK52y7EvaixjtCWvja.1"],
-
-  ["2026-10-15", "EAD", "PG_END1.SP1.2606.1", "19:00 - 21:00", "Transmissão", 1, 0, "Google Meet", "atq-ktag-gxq", "Google Meet - Estudio Sanar", "EAD", "https://meet.google.com/atq-ktag-gxq?authuser=0&hs=122&ijlm=1791913676647"],
-
-
-  //16/10/2026 17/10/2026 18/10/2026
-  ["2026-10-16", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 12:00", "TV Extra", 2, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  ["2026-10-16", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 12:00", "Notebook", 2, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  ["2026-10-16", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 12:00", "Simman", 1, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  
-  ["2026-10-16", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "13:30 - 18:00", "Transmissão", 1, 0, "CetrusOnline3", " 868 9423 1989 ", "", "Prédio 3", "https://us06web.zoom.us/j/86894231989?pwd=Yk8iWEJMQ8SP8sK4HCLBnPC9Quvaio.1"],
-  ["2026-10-16", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "13:30 - 18:00", "Notebook", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "13:30 - 18:00", "Monitor", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "13:30 - 18:00", "Focusrite", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "13:30 - 18:00", "Microfone de Mão", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-17", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 11:00", "Transmissão", 1, 0, "CetrusOnline3", " 868 9423 1989 ", "", "Prédio 3", "https://us06web.zoom.us/j/86894231989?pwd=Yk8iWEJMQ8SP8sK4HCLBnPC9Quvaio.1"],
-  ["2026-10-17", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 11:00", "Notebook", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-17", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 11:00", "Monitor", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-17", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 11:00", "Focusrite", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-17", "8º Andar - Auditório Jatobá", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:30 - 11:00", "Microfone de Mão", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-17", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "11:00 - 18:00", "TV Extra", 2, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  ["2026-10-17", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "11:00 - 18:00", "Notebook", 2, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  ["2026-10-17", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "11:00 - 18:00", "Simman", 1, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  
-  ["2026-10-18", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:00 - 12:00", "TV Extra", 2, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  ["2026-10-18", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:00 - 12:00", "Notebook", 2, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  ["2026-10-18", "3º Andar - Lado A", "PG_CDP1.SP1.2603.1/PG_CPO1.SP1.2603.1", "08:00 - 12:00", "Simman", 1, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 3", ""],
-  
-
-  ["2026-10-16", "4º Andar", "PG_REGE.SP1.2608.1", "09:00 - 10:30", "TV Extra", 1, 0, "", "", "Solicitado: 1 Tv Extra", "Prédio 3", ""],
-  ["2026-10-16", "4º Andar", "PG_REGE.SP1.2608.1", "09:00 - 10:30", "Notebook", 1, 0, "", "", "Solicitado: 1 Tv Extra", "Prédio 3", ""],
-  ["2026-10-16", "4º Andar", "PG_REGE.SP1.2608.1", "09:00 - 10:30", "Passador de Slides", 1, 0, "", "", "Solicitado: 1 Tv Extra", "Prédio 3", ""],
-
-  ["2026-10-16", "7º Andar", "PG_CAI1.SP1.2603.1", "13:30 - 18:30", "Simman", 1, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 1", ""],
-  ["2026-10-16", "7º Andar", "PG_CAI1.SP1.2603.1", "13:30 - 18:30", "TV Extra", 3, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 1", ""],
-  ["2026-10-16", "7º Andar", "PG_CAI1.SP1.2603.1", "13:30 - 18:30", "Notebook", 3, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 1", ""],
-  ["2026-10-17", "7º Andar", "PG_CAI1.SP1.2603.1", "08:30 - 11:30", "Simman", 1, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 1", ""],
-  ["2026-10-17", "7º Andar", "PG_CAI1.SP1.2603.1", "08:30 - 11:30", "TV Extra", 3, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 1", ""],
-  ["2026-10-17", "7º Andar", "PG_CAI1.SP1.2603.1", "08:30 - 11:30", "Notebook", 3, 0, "", "", "Solicitado: 2 Tv Extra + 2 Notebook com Simman", "Prédio 1", ""],
-
-  ["2026-10-17", "6º Andar - Auditório José Olimpio + Amazônia ", "PG_CAI1.SP1.2603.1", "11:30 - 13:00", "Transmissão", 1, 0, "EducaCetrus1", " 860 3783 9945 ", "", "Prédio 1", "https://us06web.zoom.us/j/86037839945?pwd=bxIbKm6DrieQ0ZgFRo6pPcV1SJDxd6.1"],
-  ["2026-10-17", "6º Andar - Auditório José Olimpio + Amazônia ", "PG_CAI1.SP1.2603.1", "11:30 - 13:00", "Notebook", 1, 0, "EducaCetrus1", " 860 3783 9945 ", "", "Prédio 1", "https://us06web.zoom.us/j/86037839945?pwd=bxIbKm6DrieQ0ZgFRo6pPcV1SJDxd6.1"],
-  ["2026-10-17", "6º Andar - Auditório José Olimpio + Amazônia ", "PG_CAI1.SP1.2603.1", "11:30 - 13:00", "Monitor", 1, 0, "EducaCetrus1", " 860 3783 9945 ", "", "Prédio 1", "https://us06web.zoom.us/j/86037839945?pwd=bxIbKm6DrieQ0ZgFRo6pPcV1SJDxd6.1"],
-  ["2026-10-17", "6º Andar - Auditório José Olimpio + Amazônia ", "PG_CAI1.SP1.2603.1", "11:30 - 13:00", "Focusrite", 1, 0, "EducaCetrus1", " 860 3783 9945 ", "", "Prédio 1", "https://us06web.zoom.us/j/86037839945?pwd=bxIbKm6DrieQ0ZgFRo6pPcV1SJDxd6.1"],
-  ["2026-10-17", "6º Andar - Auditório José Olimpio + Amazônia ", "PG_CAI1.SP1.2603.1", "11:30 - 13:00", "Microfone de Mão", 1, 0, "EducaCetrus1", " 860 3783 9945 ", "", "Prédio 1", "https://us06web.zoom.us/j/86037839945?pwd=bxIbKm6DrieQ0ZgFRo6pPcV1SJDxd6.1"],
-  ["2026-10-17", "6º Andar - Auditório José Olimpio + Amazônia ", "PG_CAI1.SP1.2603.1", "11:30 - 13:00", "Formatura", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-16", "3º Andar", "US_RAAT.SP1.2610.1", "13:30 - 18:00", "Notebook", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "3º Andar", "US_RAAT.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  //["2026-10-17", "3º Andar", "US_RAAT.SP1.2610.1", "13:30 - 18:00", "Notebook", 3, 0, "", "", "", "Prédio 3", ""],
-  //["2026-10-17", "3º Andar", "US_RAAT.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-19", "Subsolo", "US_RAAT.SP1.2610.1", "08:30 - 12:00", "TV Extra", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-19", "Subsolo", "US_RAAT.SP1.2610.1", "08:30 - 12:00", "Atenção Prática Fresh Frozen", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-16", "Auditório Cerrado", "PG_EDA2.SP1.2610.1", "14:30 - 15:00", "Caixa de SOM (JBL)", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-16", "6º Andar - Auditório Sertão", "PG_MFE1.SP1.2605.1", "14:00 - 18:00", "Hub USB-C", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-17", "1º Andar", "PG_MFE1.SP1.2605.1", "13:30 - 18:00", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-18", "3º Andar", "PG_MFE1.SP1.2605.1", "13:30 - 18:00", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-16", "EAD", "PG_REN1.SP1.2606.1", "08:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-  ["2026-10-17", "EAD", "PG_REN1.SP1.2606.1", "08:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-
-  ["2026-10-17", "EAD", "PG_RAD1.SP1.2608.1", "08:30 - 18:00", "Transmissão", 1, 0, "EducaCetrus2", " 811 8943 2926 ", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/81189432926?pwd=MjPOapsGbVvAi2jCRquZbFWJ2Km5yW.1"],
-  ["2026-10-18", "EAD", "PG_RAD1.SP1.2608.1", "08:30 - 18:00", "Transmissão", 1, 0, "EducaCetrus2", " 811 8943 2926 ", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/81189432926?pwd=MjPOapsGbVvAi2jCRquZbFWJ2Km5yW.1"],
-
-  ["2026-10-17", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Transmissão", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-17", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Focusrite", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-17", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Notebook", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-17", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Monitor", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-17", "3º Andar", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "08:30 - 12:00", "Notebook", 14, 0, "", "", "Notebook nos boxes para a prática de ambulatório", "Prédio 1", ""],
-  ["2026-10-18", "3º Andar", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "08:30 - 12:00", "Notebook", 14, 0, "", "", "Notebook nos boxes para a prática de ambulatório", "Prédio 1", ""],
-  ["2026-10-18", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Transmissão", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-18", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Focusrite", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-18", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Notebook", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-  ["2026-10-18", "Auditório - José Olimpio", "PG_ALP2.SP1.2604.1/PG_APO1.SP1.2604.1", "13:30 - 18:00", "Monitor", 1, 0, "CetrusOnline2", " 896 8285 3129 ", "", "Prédio 1", "https://us06web.zoom.us/j/89682853129?pwd=GzauzTbwKDqjSSykFNgcSKMvIyuRBN.1"],
-
-  ["2026-10-17", "2º Andar", "PG_END1.SP1.2606.1", "09:00 - 12:00", "Notebook", 9, 0, "", "", "01 notebook por box conectado a impressora", "Prédio 1", ""],
-  //["2026-10-17", "2º Andar", "PG_END1.SP1.2606.1", "09:00 - 12:00", "Tablet", 9, 0, "", "", "01 notebook por box conectado a impressora", "Prédio 1", ""],
-  ["2026-10-18", "2º Andar", "PG_END1.SP1.2606.1", "09:00 - 12:00", "Notebook", 9, 0, "", "", "01 notebook por box conectado a impressora", "Prédio 1", ""],
-  //["2026-10-18", "2º Andar", "PG_END1.SP1.2606.1", "09:00 - 12:00", "Tablet", 9, 0, "", "", "01 notebook por box conectado a impressora", "Prédio 1", ""],
-
-  ["2026-10-19", "5º Andar", "GO_HIST.SP1.2610.1", "13:30 - 18:00", "TV Extra", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-20", "5º Andar", "GO_HIST.SP1.2610.1", "13:30 - 18:00", "TV Extra", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-21", "5º Andar", "GO_HIST.SP1.2610.1", "08:30 - 12:00", "TV Extra", 3, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-19", "3º Andar", "GO_VUC1.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-20", "3º Andar", "GO_VUC1.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-21", "3º Andar", "GO_VUC1.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-22", "3º Andar", "GO_VUC1.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-20", "4º Andar", "PG_DOR2.SP1.2605.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-20", "4º Andar", "PG_DOR2.SP1.2605.1", "13:30 - 18:00", "Notebook", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-20", "4º Andar", "PG_DOR2.SP1.2605.1", "13:30 - 18:00", "Passador de Slides", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-22", "Auditório Agreste", "EC_ECOG.SP1.2610.1", "13:30 - 18:00", "Notebook", 24, 0, "", "", "", "Prédio 2", ""],
-  ["2026-10-22", "Auditório Agreste", "EC_ECOG.SP1.2610.1", "13:30 - 18:00", "Echopac", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-14", "6º Andar - Auditório José Olimpio", "US MAMA", "07:30 - 12:00", "Transmissão", 1, 0, "EducaCetrus2", " 862 1064 2538 ", "", "Prédio 1", "https://us06web.zoom.us/j/86210642538?pwd=Uvewj7RjSzQwjWjqCiJSQ7qQ9Fu1UD.1"],
-  ["2026-10-14", "6º Andar - Auditório José Olimpio", "US MAMA", "07:30 - 12:00", "Focusrite", 1, 0, "EducaCetrus2", " 862 1064 2538 ", "", "Prédio 1", "https://us06web.zoom.us/j/86210642538?pwd=Uvewj7RjSzQwjWjqCiJSQ7qQ9Fu1UD.1"],
-
-  ["2026-10-14", "6º Andar - Auditório José Olimpio", "Reunião Geral", "17:00 - 18:00", "Transmissão", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-20", "10º Andar", "FE_CGMI_SP.261", "13:30 - 18:00", "Webcam", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-20", "10º Andar", "FE_CGMI_SP.261", "13:30 - 18:00", "TV Extra", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-20", "10º Andar", "FE_CGMI_SP.261", "13:30 - 18:00", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-21", "10º Andar", "FE_CGMI_SP.261", "13:30 - 18:00", "Webcam", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-21", "10º Andar", "FE_CGMI_SP.261", "13:30 - 18:00", "TV Extra", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-21", "10º Andar", "FE_CGMI_SP.261", "13:30 - 18:00", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-21", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-  ["2026-10-28", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-  ["2026-11-04", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-  ["2026-11-11", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-  ["2026-11-18", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-  ["2026-11-25", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-
-
-  //Trasnmissão
-  ["2026-10-23", "EAD", "PG_HEF2.SP1.2610.1/PG_HEH2.RC1.2610.1", "08:30 - 13:00", "Transmissão", 1, 0, "EducaCetrus2", " 890 6313 7620 ", "", "EAD", "https://us06web.zoom.us/j/89063137620?pwd=mlPEFBt9TImfrXV4QymQy1Frf8bqvP.1"],
-  ["2026-10-24", "EAD", "PG_HEF2.SP1.2610.1/PG_HEH2.RC1.2610.1", "08:30 - 13:00", "Transmissão", 1, 0, "EducaCetrus2", " 890 6313 7620 ", "", "EAD", "https://us06web.zoom.us/j/89063137620?pwd=mlPEFBt9TImfrXV4QymQy1Frf8bqvP.1"],
-
-  ["2026-10-23", "EAD", "PG_CAR1.SP1.2608.1", "19:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline3", " 836 7662 8918 ", "", "EAD", "https://us06web.zoom.us/j/83676628918?pwd=N913L3PAYyQOcoa2DaPEE9rmVBBNp0.1"],
-  ["2026-10-24", "Audiotrio Sertão", "PG_CAR1.SP1.2608.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline3", " 836 7662 8918 ", "", "Prédio 1", "https://us06web.zoom.us/j/83676628918?pwd=N913L3PAYyQOcoa2DaPEE9rmVBBNp0.1"],
-  ["2026-10-25", "Audiotrio Sertão", "PG_CAR1.SP1.2608.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline3", " 836 7662 8918 ", "", "Prédio 1", "https://us06web.zoom.us/j/83676628918?pwd=N913L3PAYyQOcoa2DaPEE9rmVBBNp0.1"],
-
-  ["2026-10-16", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Transmissão", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Focusrite", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Transmite para AUDITÓRIO IPÊ", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-16", "8°Andar - Auditório Ipê", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Recebe transmissão da JATOBÁ", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-18", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Transmissão", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-18", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Focusrite", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-18", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Transmite para Prédio 3 - 5º ANDAR", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-18", "5º Andar", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Recebe transmissão da JATOBÁ", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-19", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Transmissão", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-19", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Focusrite", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-19", "8°Andar - Auditório Jatobá", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Transmite para Prédio 3 - 4º ANDAR", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-19", "4º Andar", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Recebe transmissão da JATOBÁ", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-19", "4º Andar", "PG_DOR2.SP1.2609.1", "08:30 - 13:00", "Atenção: mudança de local", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-17", "10º Andar", "PG_CRD1.SANAR.261017", "08:00 - 18:00", "Notebook", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-17", "10º Andar", "PG_CRD1.SANAR.261017", "08:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-17", "10º Andar", "PG_CRD1.SANAR.261017", "08:00 - 18:00", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-
-
-  ["2026-10-18", "10º Andar", "PG_CRD1.SANAR.261017", "07:45 - 13:30", "Notebook", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-18", "10º Andar", "PG_CRD1.SANAR.261017", "07:45 - 13:30", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-18", "10º Andar", "PG_CRD1.SANAR.261017", "07:45 - 13:30", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-14", "EAD", "PG_REN1.SP1.2606.1", "19:00 - 22:00", "Transmissão", 1, 0, "EducaCetrus1", "832 5228 2737", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/83252282737?pwd=IymgRbYRa4X8FAZiXhkDcbdlO2EhKA.1"],
-
-  ["2026-10-21", "EAD", "PG_DOR2.SP1.2603.1", "20:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline1", "844 0975 6007 ", "Aulas EAD", "EAD", "https://us06web.zoom.us/j/84409756007?pwd=rLa3l2bMuaw79mlizt3XoIq99ZMPsI.1"],
-
-  ["2026-10-23", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-23", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 18:00", "Focusrite", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-23", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 18:00", "Monitor", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-23", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 18:00", "Notebook", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-
-  ["2026-10-24", "Auditório Pantanal", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Transmissão", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "Auditório Pantanal", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Focusrite", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "Auditório Pantanal", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Monitor", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "Auditório Pantanal", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Notebook", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  
-  ["2026-10-24", "3º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "3º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Focusrite", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "3º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Monitor", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "3º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Notebook", 2, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-24", "3º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-25", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Transmissão", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Focusrite", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Monitor", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "Auditório Cerrado", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "08:00 - 12:00", "Notebook", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 2", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  
-  ["2026-10-25", "2º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "2º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Focusrite", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "2º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Monitor", 1, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "2º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "Notebook", 2, 0, "EducaCetrus1", " 824 4786 6130 ", "", "Prédio 1", "https://us06web.zoom.us/j/82447866130?pwd=kmAXDHdXzcSFlaYpcqB8RlHX3kXLUo.1"],
-  ["2026-10-25", "2º Andar", "PG_MFE1.SP1.2609.1/PG_MFH2.RC1.2609.1", "14:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-23", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 18:00", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-23", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 18:00", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-23", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 18:00", "Tv Extra", 2, 0, "", "", "", "Prédio 3", ""],
-  
-  ["2026-10-24", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 18:00", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-24", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 18:00", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-24", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 18:00", "Tv Extra", 2, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-25", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 12:00", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-25", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 12:00", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-25", "10º Andar", "PG_CIP1.SP1.2605.1", "08:00 - 12:00", "Tv Extra", 2, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-23", "2º Andar", "PG_USME.SP1.2603.1", "08:00 - 12:00", "Microfone da xuxa", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-23", "2º Andar", "PG_USME.SP1.2603.1", "08:00 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-23", "2º Andar", "PG_USME.SP1.2603.1", "08:00 - 12:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-23", "Auditório Pantanal", "PG_USME.SP1.2603.1", "14:00 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-24", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 12:00", "Microfone da xuxa", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-24", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-24", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 12:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-24", "Auditório Cerrado", "PG_USME.SP1.2603.1", "14:00 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-25", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 18:00", "Microfone da xuxa", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-25", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-25", "3º Andar", "PG_USME.SP1.2603.1", "08:00 - 18:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Transmissão", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Recebe transmissão externa (Blanc Hospital) ", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Tv Extra", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Notebook", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "8º Andar - Auditório Jatobá", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Atenção: GOOGLE MEET ID: puo-ntbs-mit", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-
-  ["2026-10-23", "10º Andar - Sala 2", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Transmissão", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "10º Andar - Sala 2", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Recebe transmissão externa (Blanc Hospital) ", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "10º Andar - Sala 2", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "TV Extra", 2, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "10º Andar - Sala 2", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Notebook", 2, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-  ["2026-10-23", "10º Andar - Sala 2", "PG_ENC1.SP1.2605.1", "08:00 - 14:30", "Atenção: GOOGLE MEET ID: puo-ntbs-mit", 1, 0, "GoogleMeet", "puo-ntbs-mit", "Transmissão será recebida atraves do google meet", "Prédio 3", "https://meet.google.com/puo-ntbs-mit"],
-
-  //["2026-10-24", "2º Andar", "PG_GERP.SP1.2603.1", "08:30 - 12:30", "Notebook", 12, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-25", "2º Andar", "PG_GERP.SP1.2603.1", "10:00 - 12:30", "Notebook", 12, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-25", "1º Andar", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Notebook", 13, 0, "", "", "", "Prédio 1", ""],
-  //["2026-11-02", "1º Andar", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Notebook", 13, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-26", "Auditório Pantanal", "US_MESQ.SP1.2610.1", "13:30 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-  
-  ["2026-10-27", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-27", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-27", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-27", "Auditório Pantanal", "US_MESQ.SP1.2610.1", "13:30 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-28", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-28", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-28", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-28", "Auditório Pantanal", "US_MESQ.SP1.2610.1", "13:30 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-29", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "2º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "Auditório Pantanal", "US_MESQ.SP1.2610.1", "13:30 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-30", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "Auditório Pantanal", "US_MESQ.SP1.2610.1", "13:30 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-31", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:30", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "Auditório Pantanal", "US_MESQ.SP1.2610.1", "13:30 - 18:00", "Microfone", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-11-01", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:00", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-01", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-01", "3º Andar", "US_MESQ.SP1.2610.1", "08:30 - 12:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-26", "EAD", "PG_COL1.SP1.2606.1", "20:00 - 22:30", "Transmissão", 1, 0, "CetrusOnline1", " 870 0956 4691 ", "", "EAD", "https://us06web.zoom.us/j/87009564691?pwd=5WwFh2TFK0D19XWBKYnIp8Q3ndCItO.1"],
-
-  ["2026-10-23", "Auditório Sertão", "PG_GERP.SP1.2603.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline2", "863 2355 9510", "", "Prédio 1", "https://us06web.zoom.us/j/86323559510?pwd=rs3wybVUGxLtTBxZv4ZUoqI8iCtfoN.1"],
-  ["2026-10-23", "Auditório Sertão", "PG_GERP.SP1.2603.1", "08:00 - 18:00", "Focusrite", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-23", "Auditório Sertão", "PG_GERP.SP1.2603.1", "08:00 - 18:00", "Atenção: Gravação de Aula", 1, 0, "", "", "", "Prédio 1", ""],
-  
-  ["2026-10-24", "Auditório José Olimpio", "PG_GERP.SP1.2603.1", "13:30 - 18:00", "Transmissão", 1, 0, "CetrusOnline2", "863 2355 9510", "", "Prédio 1", "https://us06web.zoom.us/j/86323559510?pwd=rs3wybVUGxLtTBxZv4ZUoqI8iCtfoN.1"],
-  ["2026-10-24", "Auditório José Olimpio", "PG_GERP.SP1.2603.1", "13:30 - 18:00", "Focusrite", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-24", "Auditório José Olimpio", "PG_GERP.SP1.2603.1", "13:30 - 18:00", "Atenção: Gravação de Aula", 1, 0, "", "", "", "Prédio 1", ""],
-  
-  ["2026-10-25", "Auditório José Olimpio", "PG_GERP.SP1.2603.1", "13:30 - 18:00", "Transmissão", 1, 0, "CetrusOnline2", "863 2355 9510", "", "Prédio 1", "https://us06web.zoom.us/j/86323559510?pwd=rs3wybVUGxLtTBxZv4ZUoqI8iCtfoN.1"],
-  ["2026-10-25", "Auditório José Olimpio", "PG_GERP.SP1.2603.1", "13:30 - 18:00", "Focusrite", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-25", "Auditório José Olimpio", "PG_GERP.SP1.2603.1", "13:30 - 18:00", "Atenção: Gravação de Aula", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-26", "Auditório Agreste", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline1", " 832 8797 0969 ", "", "Prédio 2", "https://us06web.zoom.us/j/83287970969?pwd=703Mdcb943iD6lLGPJgEplIzBtSkQi.1"],
-  ["2026-10-26", "Auditório Agreste", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Focusrite", 1, 0, "CetrusOnline1", " 832 8797 0969 ", "", "Prédio 2", "https://us06web.zoom.us/j/83287970969?pwd=703Mdcb943iD6lLGPJgEplIzBtSkQi.1"],
-  ["2026-10-26", "Auditório Agreste", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Notebook", 1, 0, "CetrusOnline1", " 832 8797 0969 ", "", "Prédio 2", "https://us06web.zoom.us/j/83287970969?pwd=703Mdcb943iD6lLGPJgEplIzBtSkQi.1"],
-  ["2026-10-26", "Auditório Agreste", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Monitor", 1, 0, "CetrusOnline1", " 832 8797 0969 ", "", "Prédio 2", "https://us06web.zoom.us/j/83287970969?pwd=703Mdcb943iD6lLGPJgEplIzBtSkQi.1"],
-  
-  ["2026-10-27", "EAD", "PG_GIN2.SP1.2603.1/PG_GIH2.RC1.2603.1", "08:00 - 18:00", "Transmissão", 1, 0, "CetrusOnline1", " 832 8797 0969 ", "", "EAD", "https://us06web.zoom.us/j/83287970969?pwd=703Mdcb943iD6lLGPJgEplIzBtSkQi.1"],
-
-  ["2026-10-27", "6º Andar - Auditório Sertão", "EC_AVMI.SP1.2610.N", "13:30 - 18:00", "Microfone", 1, 0, "", "", "Microfone da Xuxa", "Prédio 1", ""],
-  ["2026-10-27", "3º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-27", "3º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-27", "3º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  
-  ["2026-10-28", "Auditório Agreste", "EC_AVMI.SP1.2610.N", "13:30 - 18:00", "Microfone", 1, 0, "", "", "Microfone da Xuxa", "Prédio 2", ""],
-  ["2026-10-28", "5º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-28", "5º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-28", "5º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  
-  ["2026-10-29", "6º Andar - Auditório Sertão", "EC_AVMI.SP1.2610.N", "13:30 - 18:00", "Microfone", 1, 0, "", "", "Microfone da Xuxa", "Prédio 1", ""],
-  ["2026-10-29", "3º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "3º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "3º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  
-  //["2026-10-30", "1º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Microfone", 1, 0, "", "", "", "Prédio 1", ""],
-  //["2026-10-30", "1º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  //["2026-10-30", "1º Andar", "EC_AVMI.SP1.2610.N", "18:30 - 23:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-28", "EAD", "PC_CEGA.SP1.2610.1", "20:00 - 22:00", "Transmissão", 1, 0, "CetrusOnline3", " 865 1322 8640 ", "https://cdn.jwplayer.com/previews/aztGMpXu", "EAD", "https://us06web.zoom.us/j/86513228640?pwd=27uwvPiyaLnF06WFM7Sx0M3NmSj3FU.1"],
-  ["2026-10-28", "EAD", "PG_RAD1.SP1.2608.1", "20:00 - 21:30", "Transmissão", 1, 0, "CetrusOnline1", " 844 2661 6364 ", "", "EAD", "https://us06web.zoom.us/j/84426616364?pwd=aXJ4JzTFraW0ra0kUDG0febvnOxW8G.1"],
-
-  ["2026-10-29", "Auditório Pantanal", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:30 - 12:30", "Transmissão", 1, 0, "CetrusOnline3", " 812 3373 4686 ", "", "Prédio 2", "https://us06web.zoom.us/j/81233734686?pwd=nzIwqrEoMDr4YHZ4abcWnEx3geffzN.1"],
-  ["2026-10-29", "Auditório Pantanal", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:30 - 12:30", "Focusrite", 1, 0, "", "", "", "Prédio 2", ""],
-  ["2026-10-29", "Auditório Pantanal", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:30 - 12:30", "Monitor", 1, 0, "", "", "", "Prédio 2", ""],
-  ["2026-10-29", "Auditório Pantanal", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:30 - 12:30", "Notebook", 1, 0, "", "", "", "Prédio 2", ""],
-  ["2026-10-29", "Auditório Pantanal", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:30 - 12:30", "Atenção: Transmissão para recife", 1, 0, "", "", "", "Prédio 2", ""],
-
-  ["2026-10-29", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "13:30 - 18:30", "Transmissão", 1, 0, "CetrusOnline3", " 812 3373 4686 ", "", "Prédio 1", "https://us06web.zoom.us/j/81233734686?pwd=nzIwqrEoMDr4YHZ4abcWnEx3geffzN.1"],
-  ["2026-10-29", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "13:30 - 18:30", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "13:30 - 18:30", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-29", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "13:30 - 18:30", "Atenção: Transmissão para recife", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-30", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Transmissão", 1, 0, "CetrusOnline3", " 812 3373 4686 ", "", "Prédio 1", "https://us06web.zoom.us/j/81233734686?pwd=nzIwqrEoMDr4YHZ4abcWnEx3geffzN.1"],
-  ["2026-10-30", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Atenção: Transmissão para recife", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-31", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Transmissão", 1, 0, "CetrusOnline3", " 812 3373 4686 ", "", "Prédio 1", "https://us06web.zoom.us/j/81233734686?pwd=nzIwqrEoMDr4YHZ4abcWnEx3geffzN.1"],
-  ["2026-10-31", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 18:30", "Atenção: Transmissão para recife", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-11-01", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 12:30", "Transmissão", 1, 0, "CetrusOnline3", " 812 3373 4686 ", "", "Prédio 1", "https://us06web.zoom.us/j/81233734686?pwd=nzIwqrEoMDr4YHZ4abcWnEx3geffzN.1"],
-  ["2026-11-01", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 12:30", "Notebook", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-01", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 12:30", "Tv Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-01", "2º Andar", "PG_GEN1.SP1.2605.1/PG_GEH1.RC1.2605.1", "08:00 - 12:30", "Atenção: Transmissão para recife", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-31", "5º Andar", "CD_ERGO.SP1.2610.1", "08:00 - 18:30", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-31", "5º Andar", "CD_ERGO.SP1.2610.1", "08:00 - 18:30", "Impressora", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-11-01", "5º Andar", "CD_ERGO.SP1.2610.1", "08:00 - 18:30", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-  ["2026-11-01", "5º Andar", "CD_ERGO.SP1.2610.1", "08:00 - 18:30", "Impressora", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-22", "Auditório Cerrado", "US_MOR1.SP1.2610.1", "08:00 - 12:00", "Transmissão", 1, 0, "CetrusOnline1", " 843 9265 2883 ", "", "Prédio 2", "https://us06web.zoom.us/j/84392652883?pwd=Vau3stKcDO5IVKW3iEkmB75bUON6oa.1"],
-  ["2026-10-22", "Auditório Cerrado", "US_MOR1.SP1.2610.1", "08:00 - 12:00", "Transmite para Sala Maker 2", 1, 0, "CetrusOnline1", " 843 9265 2883 ", "", "Prédio 2", "https://us06web.zoom.us/j/84392652883?pwd=Vau3stKcDO5IVKW3iEkmB75bUON6oa.1"],
-  ["2026-10-22", "Sala Maker 2", "US_MOR1.SP1.2610.1", "08:00 - 12:00", "Recebe transmissão do Auditório Cerrado", 1, 0, "CetrusOnline1", " 843 9265 2883 ", "", "Prédio 2", "https://us06web.zoom.us/j/84392652883?pwd=Vau3stKcDO5IVKW3iEkmB75bUON6oa.1"],
-
-  ["2026-10-23", "Auditório Agreste", " US_MDIN.SP1.2610.1 ", "13:30 - 18:00", "Transmissão", 1, 0, "CetrusOnline1", " 837 7965 2777 ", "", "Prédio 2", "https://us06web.zoom.us/j/83779652777?pwd=j3tMRtjiUAjyqDmYd1oJBEhGPXAia9.1"],
-  ["2026-10-23", "Auditório Agreste", " US_MDIN.SP1.2610.1 ", "13:30 - 18:00", "Transmite para Sala Maker 2", 1, 0, "CetrusOnline1", " 837 7965 2777 ", "", "Prédio 2", "https://us06web.zoom.us/j/83779652777?pwd=j3tMRtjiUAjyqDmYd1oJBEhGPXAia9.1"],
-  ["2026-10-23", "Sala Maker 2", " US_MDIN.SP1.2610.1 ", "13:30 - 18:00", "Recebe transmissão do Auditório Agreste", 1, 0, "CetrusOnline1", " 837 7965 2777 ", "", "Prédio 2", "https://us06web.zoom.us/j/83779652777?pwd=j3tMRtjiUAjyqDmYd1oJBEhGPXAia9.1"],
-
-  ["2026-10-23", "8º Andar - Auditório Ipê", "PG_DOR2.SP1.2602.1", "08:30 - 13:00", "Transmissão", 1, 0, "CetrusOnline1", "  899 1012 8988  ", "", "Prédio 3", "https://us06web.zoom.us/j/89910128988?pwd=aHZbOxIl87pjPmr0fgP6IMltdCSpTx.1"],
-  ["2026-10-23", "8º Andar - Auditório Ipê", "PG_DOR2.SP1.2602.1", "08:30 - 13:00", "Transmite para 4º Andar", 1, 0, "CetrusOnline1", "  899 1012 8988  ", "", "Prédio 3", "https://us06web.zoom.us/j/89910128988?pwd=aHZbOxIl87pjPmr0fgP6IMltdCSpTx.1"],
-  ["2026-10-23", "4º Andar", "PG_DOR2.SP1.2602.1", "08:30 - 13:00", "Recebe transmissão do Auditório Ipê", 1, 0, "CetrusOnline1", "  899 1012 8988  ", "", "Prédio 3", "https://us06web.zoom.us/j/89910128988?pwd=aHZbOxIl87pjPmr0fgP6IMltdCSpTx.1"],
-  ["2026-10-23", "4º Andar", "PG_DOR2.SP1.2602.1", "08:30 - 13:00", "TV Extra", 1, 0, "CetrusOnline1", "  899 1012 8988  ", "", "Prédio 3", "https://us06web.zoom.us/j/89910128988?pwd=aHZbOxIl87pjPmr0fgP6IMltdCSpTx.1"],
-  ["2026-10-23", "4º Andar", "PG_DOR2.SP1.2602.1", "08:30 - 13:00", "Notebook", 1, 0, "CetrusOnline1", "  899 1012 8988  ", "", "Prédio 3", "https://us06web.zoom.us/j/89910128988?pwd=aHZbOxIl87pjPmr0fgP6IMltdCSpTx.1"],
-
-  ["2026-10-30", "6º Andar - José Olimpio", "PG_ALP2.SP1.2610.1", "08:30 - 09:30", "Caixa de Som JBL", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-30", "3º Andar - Lado A", "PG_GERI.SANAR.261030", "08:30 - 18:00", "Notebook", 3, 0, "", "Notebook conectados na TV mais 2 notebook para alunos", "", "Prédio 3", ""],
-  ["2026-10-30", "3º Andar - Lado A", "PG_GERI.SANAR.261030", "08:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-31", "3º Andar - Lado A", "PG_GERI.SANAR.261030", "08:00 - 18:00", "Notebook", 3, 0, "", "Notebook conectados na TV mais 2 notebook para alunos", "", "Prédio 3", ""],
-  ["2026-10-31", "3º Andar - Lado A", "PG_GERI.SANAR.261030", "08:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-11-01", "3º Andar - Lado A", "PG_GERI.SANAR.261030", "08:00 - 12:00", "Notebook", 3, 0, "", "Notebook conectados na TV mais 2 notebook para alunos", "", "Prédio 3", ""],
-  ["2026-11-01", "3º Andar - Lado A", "PG_GERI.SANAR.261030", "08:00 - 12:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-30", "10º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "TV Extra", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-30", "10º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "Notebook", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-30", "10º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-31", "10º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "TV Extra", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-31", "10º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "Notebook", 3, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-31", "10º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  //["2026-11-01", "3º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "TV Extra", 2, 0, "", "", "", "Prédio 3", ""],
-  //["2026-11-01", "3º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "Notebook", 2, 0, "", "", "", "Prédio 3", ""],
-  //["2026-11-01", "3º Andar", "PG_MEEM.SANAR.261030", "07:30 - 18:30", "Simman", 1, 0, "", "", "", "Prédio 3", ""],
-  
-  ["2026-10-31", "8º Andar - Auditório Jatobá", "PG CEGA", "08:00 - 12:00", "Atenção: Professor usa recurso proprio", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-01", "8º Andar - Auditório Jatobá", "PG CEGA", "08:00 - 12:00", "Atenção: Professor usa recurso proprio", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-30", "EAD", "PG_DPO1.SP1.2605.1", "14:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", " 847 9442 4783 ", "", "EAD", "https://us06web.zoom.us/j/84794424783?pwd=Ygztf1EYuha4VBy6anAErdfrwtl8A4.1"],
-  ["2026-10-30", "EAD", "PG_DPO1.SP1.2605.1", "14:00 - 18:00", "Atenção: Gravação de Aula ficar atento se o professor esta compartilhndo a tela e som", 1, 0, "EducaCetrus1", " 847 9442 4783 ", "", "EAD", "https://us06web.zoom.us/j/84794424783?pwd=Ygztf1EYuha4VBy6anAErdfrwtl8A4.1"],
-  ["2026-10-31", "EAD", "PG_DPO1.SP1.2605.1", "08:00 - 18:00", "Transmissão", 1, 0, "EducaCetrus1", " 847 9442 4783 ", "", "EAD", "https://us06web.zoom.us/j/84794424783?pwd=Ygztf1EYuha4VBy6anAErdfrwtl8A4.1"],
-  ["2026-10-31", "EAD", "PG_DPO1.SP1.2605.1", "08:00 - 18:00", "Atenção: Gravação de Aula ficar atento se o professor esta compartilhndo a tela e som", 1, 0, "EducaCetrus1", " 847 9442 4783 ", "", "EAD", "https://us06web.zoom.us/j/84794424783?pwd=Ygztf1EYuha4VBy6anAErdfrwtl8A4.1"],
-
-  ["2026-10-31", "4º Andar", "PC_REG1.SP1.2607.1", "08:30 - 18:00", "Notebook", 1, 0, "", "", "", "Prédio 3", ""],
-  ["2026-10-31", "4º Andar", "PC_REG1.SP1.2607.1", "08:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 3", ""],
-
-  ["2026-10-31", "3º Andar", "EC_AVMI.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "3º Andar", "EC_AVMI.SP1.2610.1", "13:30 - 18:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-01", "3º Andar", "EC_AVMI.SP1.2610.1", "13:30 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-01", "3º Andar", "EC_AVMI.SP1.2610.1", "13:30 - 18:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-02", "3º Andar", "EC_AVMI.SP1.2610.1", "08:00 - 13:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-02", "3º Andar", "EC_AVMI.SP1.2610.1", "08:00 - 13:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-03", "3º Andar", "EC_AVMI.SP1.2610.1", "08:00 - 18:00", "TV Extra", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-11-03", "3º Andar", "EC_AVMI.SP1.2610.1", "08:00 - 18:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-11-01", "EAD", "PG_COP1.SP1.2608.1", "08:30 - 12:30", "Transmissão", 1, 0, "CetrusOnline2", " 848 5697 6694 ", "EAD síncrono Obs: gravar e disponibilizar na plataforma. Obs: deixar alguém de suporte da TI 100% do tempo.", "EAD", "https://us06web.zoom.us/j/84856976694?pwd=035uRpxnn30fiZIyapsoWTRseZeWit.1"],
-
-  ["2026-10-30", "1º Andar |DIV", "EC_AVMI.SP1.2610.N", "13:30 - 22:00", "TV Extra", 2, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "1º Andar |DIV", "EC_AVMI.SP1.2610.N", "13:30 - 22:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-30", "1º Andar |DIV", "EC_AVMI.SP1.2610.N", "13:30 - 22:00", "Atenção: Sera Montado um Box Central no Box9", 1, 0, "", "", "", "Prédio 1", ""],
-
-  ["2026-10-31", "1º Andar |DIV", "PG_OBS1/US_ABP1", "13:30 - 22:00", "TV Extra", 2, 0, "", "", "", "Prédio 1", ""],
-  ["2026-10-31", "1º Andar |DIV", "PG_OBS1/US_ABP1", "13:30 - 22:00", "Câmera Tripé", 1, 0, "", "", "", "Prédio 1", ""],
-
-
-  //WEBINARS PERALTA
-  ["2026-10-26", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-11-02", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-11-09", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-11-16", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-11-23", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-11-30", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-12-07", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-12-14", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-12-21", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2026-12-28", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2027-01-04", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2027-01-11", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2027-01-18", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2027-01-25", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-  ["2027-02-01", "EAD", " Reunião Cientifica - Medicina Fetal ", "12:00 - 13:00", "Transmissão", 1, 0, "EducaCetrus", " 870 7828 1502 ", "Webinar Peralta", "EAD", ""],
-
-  //WEBINARS HEFE
-  ["2026-10-28", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2026-11-25", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2026-12-16", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-01-27", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-02-24", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-03-31", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-04-28", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-05-19", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-06-23", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-07-28", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-08-25", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-09-29", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-10-27", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-11-17", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-  ["2027-12-15", "EAD", "PG HEFE", "20:30 - 22:00", "Transmissão", 1, 0, "EducaCetrus2", " 897 7046 0006 ", "WEBINAR ECO FETAL - DRA MARINA", "EAD", "https://us06web.zoom.us/j/89770460006?pwd=TaU0LWtDALLEaZqQE2QZaPH8UWxrhw.1"],
-
-];
-
+// ════════════════════════════════════════════════════════════════════════════
+// FONTE DOS DADOS: Google Sheets publicado como CSV
+// Colunas (nesta ordem): Data | Sala | Curso | Horário | Recurso | Qtd | Locado |
+//                        Conta | ID Reunião | Observação | Unidade | Link | Ativo
+// • Data: dd/mm/aaaa (ou aaaa-mm-dd)
+// • Ativo: só entram linhas marcadas (TRUE). Desmarcou = some do dashboard.
+// • Linhas sem Data são ignoradas.
+// ════════════════════════════════════════════════════════════════════════════
+const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRaYNzG_nOreKzn6M5wyM2m_UkO9HLLoghHGAg8EKwPdJpJM-C2DDa1eJaeX0UUtNGQfyC3lMRAux72/pub?output=csv';
+const REFRESH_MS = 5 * 60 * 1000;   // recarrega a planilha a cada 5 minutos
+
+let DATA = [];
+let byDate = {}, availYMs = {};
+let lastSync = null, loading = false;
 
 const CONTAS_ZOOM = {
   "EducaCetrus1":  {"u":"cetrus.online@cetrus.com.br",  "p":"4t7kP5664X6H"},
@@ -972,7 +296,86 @@ const CONTAS_MEET = {
   "AudioVisual": {"u":"estudiossanar@sanar.com", "p":"???"},
 };
 
-// Resource config: icon + css class + label
+// ── Leitura da planilha ────────────────────────────────────────────────────
+function truthy(v){
+  const s=String(v==null?'':v).trim().toLowerCase();
+  return ['true','verdadeiro','1','sim','s','x','yes'].indexOf(s)>=0;
+}
+function toISO(v){
+  const s=String(v==null?'':v).trim();
+  if(!s)return '';
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if(m){let y=m[3]; if(y.length===2)y='20'+y; return y+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');}
+  return '';
+}
+function rowsFromCSV(txt){
+  const rows=Papa.parse(txt,{skipEmptyLines:true}).data;
+  if(!rows.length)return [];
+  const head=rows[0].map(function(h){return String(h).trim().toLowerCase();});
+  const iAtivo=head.indexOf('ativo');
+  const out=[];
+  for(const r of rows.slice(1)){
+    const g=function(i){return String(r[i]==null?'':r[i]).trim();};
+    const d=toISO(r[0]);
+    if(!d)continue;                                         // linha vazia
+    if(iAtivo>=0 && g(iAtivo)!=='' && !truthy(g(iAtivo)))continue; // desmarcada
+    const qtd=Number(g(5).replace(',','.'));
+    out.push([
+      d, g(1), g(2), g(3), g(4),
+      isNaN(qtd)||g(5)===''?1:qtd,
+      truthy(g(6))?1:0,
+      g(7), g(8), g(9), g(10), g(11)
+    ]);
+  }
+  return out;
+}
+function buildIndex(){
+  byDate={}; availYMs={};
+  for(const r of DATA){
+    const d=r[0], ym=d.slice(0,7);
+    if(!byDate[d])byDate[d]=[];
+    byDate[d].push(r);
+    availYMs[ym]=(availYMs[ym]||0)+1;
+  }
+}
+function setStatus(ok,msg){
+  document.getElementById('livebadge').classList.toggle('err',!ok);
+  document.getElementById('livetxt').textContent=ok?'Ao vivo':'Sem conexão';
+  document.getElementById('lupd').textContent=msg;
+}
+function hhmm(d){return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+
+async function loadData(first){
+  if(loading)return;
+  loading=true;
+  const btn=document.getElementById('rbtn'); btn.classList.add('spin');
+  try{
+    const res=await fetch(SHEET_CSV+'&t='+Date.now(),{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const txt=await res.text();
+    if(txt.trim().charAt(0)==='<')throw new Error('A planilha não devolveu CSV');
+    DATA=rowsFromCSV(txt);
+    buildIndex();
+    lastSync=new Date();
+    if(first)pickInitialDate();
+    renderAll();
+    setStatus(true,'Sincronizado às '+hhmm(lastSync)+' \u2014 '+DATA.length+' linhas');
+  }catch(err){
+    console.error('Erro ao carregar planilha:',err);
+    if(!lastSync){
+      document.getElementById('tl').innerHTML='<div class="empty err"><i class="ti ti-cloud-off"></i>Não foi possível carregar a planilha.<small>Confira se ela continua publicada na Web como CSV e tente o botão de recarregar.</small></div>';
+      setStatus(false,'Falha ao carregar');
+    } else {
+      setStatus(false,'Falha ao atualizar \u2014 dados de '+hhmm(lastSync));
+    }
+  }finally{
+    loading=false; btn.classList.remove('spin');
+  }
+}
+
+// ── Configuração de recursos ───────────────────────────────────────────────
 function recInfo(rec) {
   const r = rec.toLowerCase();
   if (r.includes('aten\u00e7\u00e3o')||r.includes('atencao')) return {i:'ti-alert-triangle', c:'twarn', l:rec};
@@ -981,7 +384,7 @@ function recInfo(rec) {
   if (r.includes('caixa de som')||r.includes('caixa som')) return {i:'ti-device-speaker', c:'tsom', l:'Caixa de Som'};
   if (r.includes('microfone') && (r.includes('bast')||r.includes('de m\u00e3o')||r.includes('de mao'))) return {i:'ti-microphone-2', c:'tmic', l:'Microfone de M\u00e3o'};
   if (r.includes('podcast'))     return {i:'ti-brand-apple-podcast', c:'tpod', l:'Microfone Podcast'};
-  if ((r.includes('c\u00e2mera')||r.includes('camera')) && r.includes('trip')) return {i:'ti-video', c:'tcam', l:'C\u00e2mera Trip\u00e9'};  
+  if ((r.includes('c\u00e2mera')||r.includes('camera')) && r.includes('trip')) return {i:'ti-video', c:'tcam', l:'C\u00e2mera Trip\u00e9'};
   if (r.includes('notebook'))    return {i:'ti-device-laptop', c:'tnb', l:'Notebook'};
   if (r.includes('tv extra'))    return {i:'ti-device-tv',     c:'ttv', l:'TV Extra'};
   if (r.includes('transmiss'))   return {i:'ti-broadcast',     c:'ttr', l:'Transmiss\u00e3o'};
@@ -994,8 +397,8 @@ function recInfo(rec) {
   if (r.includes('adaptador'))   return {i:'ti-plug',          c:'toth',l:'Adaptador'};
   if (r.includes('rayban'))      return {i:'ti-glasses',       c:'toth',l:'Rayban'};
   if (r.includes('radiant'))     return {i:'ti-report-medical',c:'toth',l:'Radiant'};
-  if (r.includes('impressora'))   return {i:'ti-printer',        c:'toth',l:'Impressora'};
-  if (r.includes('4dview'))       return {i:'ti-3d-cube-sphere', c:'toth',l:'4DView'};
+  if (r.includes('impressora'))  return {i:'ti-printer',       c:'toth',l:'Impressora'};
+  if (r.includes('4dview'))      return {i:'ti-3d-cube-sphere',c:'toth',l:'4DView'};
   return {i:'ti-package',c:'toth',l:rec};
 }
 // Ícones de período baseado no horário
@@ -1007,15 +410,15 @@ function periodIcons(timeStr){
     const p = t.split(':').map(Number);
     return p[0]*60 + p[1];
   });
-  // Regras: manhã < 12:30 (750min) | tarde 12:30-18:59 (750-1140) | noite >= 19:00 (1140)
+  // manhã < 12:30 | tarde 12:30-18:59 | noite >= 19:00
   const periods = new Set();
   const isRange = timeStr.includes('-') && times.length >= 2;
   if(isRange){
     const start = Math.min.apply(null, times);
     const end   = Math.max.apply(null, times);
-    if(start < 750)                     periods.add('m');   // manhã
-    if(start < 1140 && end > 750)       periods.add('t');   // tarde
-    if(end >= 1140)                     periods.add('n');   // noite
+    if(start < 750)               periods.add('m');
+    if(start < 1140 && end > 750) periods.add('t');
+    if(end >= 1140)               periods.add('n');
   } else {
     times.forEach(function(min){
       if(min < 750)       periods.add('m');
@@ -1031,7 +434,7 @@ function periodIcons(timeStr){
   return ['m','t','n'].filter(function(p){return periods.has(p);}).map(function(p){return ic[p];}).join('');
 }
 
-// Ordem oficial das salas: chave "Prédio|Sala" (Prédio 1 -> Prédio 2 -> Prédio 3 -> EAD)
+// Ordem oficial das salas: chave "Prédio|Sala"
 const ROOM_ORDER=[
   'Prédio 1|1º Andar','Prédio 1|2º Andar','Prédio 1|3º Andar','Prédio 1|5º Andar',
   'Prédio 1|6º Andar - Amazônia','Prédio 1|6º Andar - José Olimpio','Prédio 1|6º Andar - Sertão',
@@ -1046,30 +449,28 @@ const WFULL=['Domingo','Segunda-feira','Ter\u00e7a-feira','Quarta-feira','Quinta
 const MLBL=['','Janeiro','Fevereiro','Mar\u00e7o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const COLORS=['#2dd4a0','#5b9cf6','#c4b5fd','#fb923c','#fcd34d','#f472b6','#34d399','#60a5fa'];
 
-const byDate={}, availYMs={};
-for(const r of DATA){
-  const d=r[0], ym=d.slice(0,7);
-  if(!byDate[d])byDate[d]=[];
-  byDate[d].push(r);
-  availYMs[ym]=(availYMs[ym]||0)+1;
-}
-
 function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-// Rótulo completo da sala: "Prédio - Andar - Nome/Lado" (EAD fica só "EAD")
 function roomLabel(predio,sala){
   if(sala==='EAD'||predio==='EAD')return 'EAD';
   return predio+' - '+sala;
 }
 
 let selDate=todayISO(), selMonth=selDate.slice(0,7), selFilter='Todos';
-if(!availYMs[selMonth]){const yms=Object.keys(availYMs).sort();selMonth=yms[yms.length-1]||selMonth;}
-if(!byDate[selDate]){const days=Object.keys(byDate).filter(d=>d.startsWith(selMonth)).sort();selDate=days[0]||selDate;}
+
+function pickInitialDate(){
+  selDate=todayISO(); selMonth=selDate.slice(0,7);
+  if(!availYMs[selMonth]){const yms=Object.keys(availYMs).sort();selMonth=yms[yms.length-1]||selMonth;}
+  if(!byDate[selDate]&&selDate.slice(0,7)!==selMonth){
+    const days=Object.keys(byDate).filter(function(d){return d.startsWith(selMonth);}).sort();
+    selDate=days[0]||selDate;
+  }
+}
 
 function filteredRows(){
   const rows=byDate[selDate]||[];
   if(selFilter==='Todos')return rows;
-  return rows.filter(r=>r[10]===selFilter);
+  return rows.filter(function(r){return r[10]===selFilter;});
 }
 
 function setFilter(f){
@@ -1086,9 +487,7 @@ function renderAll(){renderPills();renderCal();renderDay();renderZoom();}
 function renderPills(){
   document.getElementById('mpills').innerHTML=Object.keys(availYMs).sort().map(function(ym){
     const parts=ym.split('-'), y=parts[0], m=parts[1];
-    const days=new Set(Object.keys(byDate).filter(function(d){return d.startsWith(ym);}).length > 0 ?
-      Object.keys(byDate).filter(function(d){return d.startsWith(ym);}) : []).size || 
-      Object.keys(byDate).filter(function(d){return d.startsWith(ym);}).length;
+    const days=Object.keys(byDate).filter(function(d){return d.startsWith(ym);}).length;
     return '<button class="mpill '+(ym===selMonth?'active':'')+'" onclick="selMon(\''+ym+'\')">'+MLBL[+m]+' '+y+'<span class="mcnt">'+days+'d</span></button>';
   }).join('');
 }
@@ -1145,19 +544,18 @@ function renderDay(){
   const flabel=selFilter==='Todos'?'':' \u2014 '+selFilter;
   document.getElementById('dtitle').textContent=d+' de '+MLBL[m]+' de '+y;
   document.getElementById('dsub').textContent=WFULL[dow]+flabel+(rows.length===0?' \u2014 sem agendamentos com recursos':'');
-  document.getElementById('lupd').textContent='Atualizado: '+new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
 
   let nb=0,nbLoc=0,tv=0,tr=0;
   for(const r of rows){
     const rl=r[4].toLowerCase();
-    if(rl.includes('notebook') && rl.includes('locado')) nbLoc+=r[5];
+    if(rl.includes('notebook') && (rl.includes('locado')||r[6])) nbLoc+=r[5];
     else if(rl.includes('notebook')) nb+=r[5];
     if(rl.includes('tv'))tv+=r[5];
     if(rl.includes('transmiss'))tr++;
   }
   const slots=groupSlots(rows);
   const nbSub=nbLoc>0
-    ? '<div class="msub"><span style="color:var(--green)">'+nb+' Proprios</span> + <span style="color:var(--amber)">'+nbLoc+' locados</span></div>'
+    ? '<div class="msub"><span style="color:var(--green)">'+nb+' próprios</span> + <span style="color:var(--amber)">'+nbLoc+' locados</span></div>'
     : '<div class="msub">'+nb+' unidades</div>';
   document.getElementById('metrics').innerHTML=
     '<div class="metric mp"><div class="mlbl"><i class="ti ti-calendar-check"></i>Agendamentos</div><div class="mval">'+slots.length+'</div><div class="msub">com recursos</div></div>'+
@@ -1171,7 +569,6 @@ function renderDay(){
   } else {
     tl.innerHTML=slots.map(function(s,i){
       const col=COLORS[i%COLORS.length];
-      // Group resources for this slot
       const recMap={};
       for(const r of s.recs){
         const k=r[4];
@@ -1184,16 +581,15 @@ function renderDay(){
         const info=recInfo(rec);
         const locBadge=v.locado?'<span class="tloc">Locado</span>':'';
         const qty=v.qtd>1?' \xd7'+v.qtd:'';
-        tags+='<span class="tag '+info.c+'"><i class="ti '+info.i+'"></i>'+info.l+qty+locBadge+'</span>';
+        tags+='<span class="tag '+info.c+'"><i class="ti '+info.i+'"></i>'+esc(info.l)+qty+locBadge+'</span>';
       }
       const descEntries=Object.entries(s.descs||{});
       const stipHtml=descEntries.length?'<div class="stip">'+descEntries.map(function(de){return'<strong>'+esc(de[0])+'</strong>'+esc(de[1]);}).join('<br><br>')+'</div>':'';
-      //return '<div class="slot">'+stipHtml+'<span class="stime">'+(s.i||'\u2014')+'</span><div class="sbar" style="background:'+col+'"></div><div><div class="scurso">'+esc(s.c||'\u2014')+'</div><div class="stags">'+tags+'</div></div><span class="ssala">'+esc(roomLabel(s.u,s.a))+'</span></div>';
-      return '<div class="slot">'+stipHtml+'<span class="stime"><span class="speri">'+periodIcons(s.i)+'</span>'+(s.i||'\u2014')+'</span><div class="sbar" style="background:'+col+'"></div><div><div class="scurso">'+esc(s.c||'\u2014')+'</div><div class="stags">'+tags+'</div></div><span class="ssala">'+esc(roomLabel(s.u,s.a))+'</span></div>';
+      return '<div class="slot">'+stipHtml+'<span class="stime"><span class="speri">'+periodIcons(s.i)+'</span>'+esc(s.i||'\u2014')+'</span><div class="sbar" style="background:'+col+'"></div><div><div class="scurso">'+esc(s.c||'\u2014')+'</div><div class="stags">'+tags+'</div></div><span class="ssala">'+esc(roomLabel(s.u,s.a))+'</span></div>';
     }).join('');
   }
 
-  // Salas — group by room, aggregate ALL resources
+  // Salas — agrupa por sala e soma todos os recursos
   const smap={};
   for(const r of rows){
     const k=r[1];
@@ -1220,7 +616,7 @@ function renderDay(){
     if(ib===-1)return -1;
     return ia-ib;
   });
-  if(!entries.length){sg.innerHTML='<div class="empty">Nenhuma sala com recursos hoje'+(selFilter!=='Todos'?' em '+selFilter:'')+'</div>';return;}
+  if(!entries.length){sg.innerHTML='<div class="empty">Nenhuma sala com recursos neste dia'+(selFilter!=='Todos'?' em '+selFilter:'')+'</div>';return;}
   sg.innerHTML=entries.map(function(e){
     const sala=e[0], sd=e[1];
     let rec='';
@@ -1228,14 +624,9 @@ function renderDay(){
       const info=recInfo(r);
       const locBadge=v.locado?'<span class="sloc">Locado</span>':'';
       const qty=v.qtd>1?': <strong>'+v.qtd+'</strong>':'';
-      
       rec+='<div class="srec"><i class="ti '+info.i+'" style="color:var(--'+
         ({tnb:'green',ttv:'blue',ttr:'orange',tcam:'pink',tmon:'teal',tsom:'indigo',ttx:'red',trx:'sky',twarn:'amber',tpod:'lime'}[info.c]||'purple')+')"></i>'+
-        info.l+qty+locBadge+'</div>';
-      
-      //rec+='<div class="srec"><i class="ti '+info.i+'" style="color:var(--'+
-      //  (info.c==='tnb'?'green':info.c==='ttv'?'blue':info.c==='ttr'?'orange':info.c==='tcam'?'pink':info.c==='tmon'?'teal':'purple')+')"></i>'+
-      //  info.l+qty+locBadge+'</div>';
+        esc(info.l)+qty+locBadge+'</div>';
     }
     if(sd.tr){
       if(sd.cz)rec+='<div class="srec"><i class="ti ti-brand-zoom" style="color:var(--blue)"></i>Conta: <strong>'+esc(sd.cz)+'</strong></div>';
@@ -1249,17 +640,16 @@ function renderDay(){
 
 // ── Zoom ───────────────────────────────────────────────────────────────────
 function renderZoom(){
-  const usedMap={};  // conta -> {aulas:[{a,c,i,link}]}
+  const usedMap={};
   for(const r of filteredRows()){
     if(!r[4].toLowerCase().includes('transmiss'))continue;
     const conta=r[7];
     if(!conta||!CONTAS_ZOOM[conta])continue;
     if(!usedMap[conta])usedMap[conta]={aulas:[]};
-
     const link=(r[11]||'').trim();
     const ex=usedMap[conta].aulas.find(function(x){return x.a===r[1]&&x.c===r[2];});
     if(ex){
-      if(!ex.link&&link)ex.link=link;   // completa o link se a 1ª linha não tinha
+      if(!ex.link&&link)ex.link=link;
     } else {
       usedMap[conta].aulas.push({a:r[1],c:r[2],i:r[3],link:link});
     }
@@ -1292,10 +682,10 @@ function renderZoom(){
   document.getElementById('zgrid').innerHTML=
     (usedNames.length
       ?usedNames.map(function(n){return makeCard(n,CONTAS_ZOOM[n],true,usedMap[n]);}).join('')
-      :'<div class="empty" style="padding:16px;text-align:left"><i class="ti ti-video-off" style="font-size:20px;margin-bottom:4px;display:block"></i>Nenhuma transmiss\u00e3o hoje</div>')
+      :'<div class="empty" style="padding:16px;text-align:left"><i class="ti ti-video-off" style="font-size:20px;margin-bottom:4px;display:block"></i>Nenhuma transmiss\u00e3o neste dia</div>')
     +unusedNames.map(function(n){return makeCard(n,CONTAS_ZOOM[n],false,{aulas:[]});}).join('');
 
-      renderMeet();
+  renderMeet();
 }
 
 // ── Google Meet ────────────────────────────────────────────────────────────
@@ -1354,7 +744,7 @@ function renderMeet(){
   document.getElementById('mgrid').innerHTML=
     (usedNames.length
       ?usedNames.map(function(n){return makeCard(n,CONTAS_MEET[n],true,usedMap[n]);}).join('')
-      :'<div class="empty" style="padding:16px;text-align:left"><i class="ti ti-video-off" style="font-size:20px;margin-bottom:4px;display:block"></i>Nenhuma transmiss\u00e3o via Meet hoje</div>')
+      :'<div class="empty" style="padding:16px;text-align:left"><i class="ti ti-video-off" style="font-size:20px;margin-bottom:4px;display:block"></i>Nenhuma transmiss\u00e3o via Meet neste dia</div>')
     +unusedNames.map(function(n){return makeCard(n,CONTAS_MEET[n],false,{aulas:[]});}).join('');
 }
 
@@ -1403,9 +793,15 @@ function renderAllAccounts(){
   }).join('');
 }
 
-renderAll();
+// ── Inicialização ──────────────────────────────────────────────────────────
 renderAllAccounts();
 renderAllMeetAccounts();
+renderCal();
+loadData(true);
+setInterval(function(){loadData(false);}, REFRESH_MS);
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible' && lastSync && Date.now()-lastSync.getTime()>60000) loadData(false);
+});
 </script>
 </body>
 </html>
